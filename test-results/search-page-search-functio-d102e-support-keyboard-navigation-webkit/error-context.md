@@ -1,0 +1,92 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 🧭
+        - generic [ref=e7]: RoamWise
+      - button "🌓" [ref=e9] [cursor=pointer]
+  - main [ref=e10]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - heading "Discover Amazing Places" [level=1] [ref=e14]
+        - paragraph [ref=e15]: AI-powered recommendations tailored just for you
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - heading "🌤️ Current Weather" [level=3] [ref=e19]
+          - button "🔄" [ref=e20] [cursor=pointer]
+        - generic [ref=e22]:
+          - generic [ref=e23]: 🌤️
+          - generic [ref=e24]: Unable to get weather data
+          - generic [ref=e25]: Location access denied
+          - button "Try Again" [ref=e26] [cursor=pointer]
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - heading "🔍 Smart Search" [level=2] [ref=e30]
+          - paragraph [ref=e31]: Powered by o3-mini AI
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - textbox "Search for places and experiences" [active] [ref=e34]: test query
+            - button "Execute search" [ref=e35] [cursor=pointer]:
+              - generic [ref=e36] [cursor=pointer]: Search
+            - button "Voice search" [ref=e37] [cursor=pointer]: 🎤
+            - button "Clear search" [ref=e38] [cursor=pointer]: ✕
+          - generic [ref=e39]: Enter your search query and press enter or click search
+          - generic [ref=e41]:
+            - generic [ref=e42] [cursor=pointer]:
+              - checkbox "🕐 Open now" [ref=e43]
+              - generic [ref=e44] [cursor=pointer]: 🕐 Open now
+            - generic [ref=e45] [cursor=pointer]:
+              - checkbox "⭐ High rated (4.0+)" [ref=e46]
+              - generic [ref=e47] [cursor=pointer]: ⭐ High rated (4.0+)
+            - generic [ref=e48]:
+              - generic [ref=e49]: "📍 Radius:"
+              - combobox [ref=e50]:
+                - option "1 km"
+                - option "2 km" [selected]
+                - option "5 km"
+                - option "10 km"
+            - generic [ref=e52] [cursor=pointer]:
+              - checkbox "☔ Rain Plan" [ref=e53]
+              - generic [ref=e54] [cursor=pointer]: ☔ Rain Plan
+          - generic [ref=e55]:
+            - heading "🍕 Food & Drinks" [level=4] [ref=e56]
+            - generic [ref=e57]:
+              - generic [ref=e58] [cursor=pointer]: 🍽️ Restaurants
+              - generic [ref=e59] [cursor=pointer]: 🍕 Pizza
+              - generic [ref=e60] [cursor=pointer]: 🍦 Ice Cream
+              - generic [ref=e61] [cursor=pointer]: ☕ Cafes
+            - heading "🏛️ Attractions & Views" [level=4] [ref=e62]
+            - generic [ref=e63]:
+              - generic [ref=e64] [cursor=pointer]: 🏛️ Attractions
+              - generic [ref=e65] [cursor=pointer]: 🌄 Viewpoints
+              - generic [ref=e66] [cursor=pointer]: 🏛️ Museums
+              - generic [ref=e67] [cursor=pointer]: 🌳 Parks
+            - heading "🚴 Activities" [level=4] [ref=e68]
+            - generic [ref=e69]:
+              - generic [ref=e70] [cursor=pointer]: 🥾 Hiking
+              - generic [ref=e71] [cursor=pointer]: 🚴 Biking
+              - generic [ref=e72] [cursor=pointer]: 🎯 Entertainment
+              - generic [ref=e73] [cursor=pointer]: 🛍️ Shopping
+      - region "Search results"
+  - navigation [ref=e74]:
+    - generic [ref=e75]:
+      - link "🔍 Search" [ref=e76] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e77] [cursor=pointer]: 🔍
+        - generic [ref=e78] [cursor=pointer]: Search
+      - link "🤖 AI Assistant" [ref=e79] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e80] [cursor=pointer]: 🤖
+        - generic [ref=e81] [cursor=pointer]: AI Assistant
+      - link "🗺️ Trip Plan" [ref=e82] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e83] [cursor=pointer]: 🗺️
+        - generic [ref=e84] [cursor=pointer]: Trip Plan
+      - link "👤 Profile" [ref=e85] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e86] [cursor=pointer]: 👤
+        - generic [ref=e87] [cursor=pointer]: Profile
+```

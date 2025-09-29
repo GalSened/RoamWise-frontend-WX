@@ -1,0 +1,272 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 🧭
+        - generic [ref=e7]: RoamWise
+      - button "🌓" [ref=e9] [cursor=pointer]
+  - main [ref=e10]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - heading "Discover Amazing Places" [level=1] [ref=e14]
+        - paragraph [ref=e15]: AI-powered recommendations tailored just for you
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - heading "🌤️ Current Weather" [level=3] [ref=e19]
+          - button "🔄" [ref=e20] [cursor=pointer]
+        - generic [ref=e22]:
+          - generic [ref=e23]: 🌤️
+          - generic [ref=e24]: Unable to get weather data
+          - generic [ref=e25]: Location access denied
+          - button "Try Again" [ref=e26] [cursor=pointer]
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - heading "🔍 Smart Search" [level=2] [ref=e30]
+          - paragraph [ref=e31]: Powered by o3-mini AI
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - textbox "Search for places and experiences" [ref=e34]: attractions
+            - button "Execute search" [ref=e35] [cursor=pointer]:
+              - generic [ref=e36] [cursor=pointer]: Search
+            - button "Voice search" [ref=e37] [cursor=pointer]: 🎤
+            - button "Clear search" [ref=e38] [cursor=pointer]: ✕
+          - generic [ref=e39]: Enter your search query and press enter or click search
+          - generic [ref=e41]:
+            - generic [ref=e42] [cursor=pointer]:
+              - checkbox "🕐 Open now" [ref=e43]
+              - generic [ref=e44] [cursor=pointer]: 🕐 Open now
+            - generic [ref=e45] [cursor=pointer]:
+              - checkbox "⭐ High rated (4.0+)" [ref=e46]
+              - generic [ref=e47] [cursor=pointer]: ⭐ High rated (4.0+)
+            - generic [ref=e48]:
+              - generic [ref=e49]: "📍 Radius:"
+              - combobox [ref=e50]:
+                - option "1 km"
+                - option "2 km" [selected]
+                - option "5 km"
+                - option "10 km"
+            - generic [ref=e52] [cursor=pointer]:
+              - checkbox "☔ Rain Plan" [ref=e53]
+              - generic [ref=e54] [cursor=pointer]: ☔ Rain Plan
+          - generic [ref=e55]:
+            - heading "🍕 Food & Drinks" [level=4] [ref=e56]
+            - generic [ref=e57]:
+              - generic [ref=e58] [cursor=pointer]: 🍽️ Restaurants
+              - generic [ref=e59] [cursor=pointer]: 🍕 Pizza
+              - generic [ref=e60] [cursor=pointer]: 🍦 Ice Cream
+              - generic [ref=e61] [cursor=pointer]: ☕ Cafes
+            - heading "🏛️ Attractions & Views" [level=4] [ref=e62]
+            - generic [ref=e63]:
+              - generic [ref=e64] [cursor=pointer]: 🏛️ Attractions
+              - generic [ref=e65] [cursor=pointer]: 🌄 Viewpoints
+              - generic [ref=e66] [cursor=pointer]: 🏛️ Museums
+              - generic [ref=e67] [cursor=pointer]: 🌳 Parks
+            - heading "🚴 Activities" [level=4] [ref=e68]
+            - generic [ref=e69]:
+              - generic [ref=e70] [cursor=pointer]: 🥾 Hiking
+              - generic [ref=e71] [cursor=pointer]: 🚴 Biking
+              - generic [ref=e72] [cursor=pointer]: 🎯 Entertainment
+              - generic [ref=e73] [cursor=pointer]: 🛍️ Shopping
+      - region "Search results" [ref=e74]:
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - heading "King Albert Square" [level=3] [ref=e77]
+            - generic [ref=e78]: "4.5"
+          - paragraph [ref=e79]: Tel Aviv-Yafo
+          - generic [ref=e80]:
+            - generic [ref=e81]: ⭐ Highly Rated
+            - generic [ref=e82]: 🕐 Open Now
+          - generic [ref=e83]:
+            - button "Compare" [ref=e84] [cursor=pointer]
+            - button "Details" [ref=e85] [cursor=pointer]
+            - button "Save" [ref=e86] [cursor=pointer]
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - heading "The White City of Tel Aviv" [level=3] [ref=e89]
+            - generic [ref=e90]: "3.9"
+          - paragraph [ref=e91]: Tel Aviv-Yafo
+          - generic [ref=e93]: 🕐 Open Now
+          - generic [ref=e94]:
+            - button "Compare" [ref=e95] [cursor=pointer]
+            - button "Details" [ref=e96] [cursor=pointer]
+            - button "Save" [ref=e97] [cursor=pointer]
+        - generic [ref=e98]:
+          - generic [ref=e99]:
+            - heading "Street Art & Graffiti" [level=3] [ref=e100]
+            - generic [ref=e101]: "4.1"
+          - paragraph [ref=e102]: Rambam St 15, Tel Aviv-Yafo
+          - generic [ref=e104]: 🕐 Open Now
+          - generic [ref=e105]:
+            - button "Compare" [ref=e106] [cursor=pointer]
+            - button "Details" [ref=e107] [cursor=pointer]
+            - button "Save" [ref=e108] [cursor=pointer]
+        - generic [ref=e109]:
+          - generic [ref=e110]:
+            - heading "Palm viewpoint" [level=3] [ref=e111]
+            - generic [ref=e112]: "4.5"
+          - paragraph [ref=e113]: HaRav Kosovsky St 69, Tel Aviv-Yafo
+          - generic [ref=e114]:
+            - generic [ref=e115]: ⭐ Highly Rated
+            - generic [ref=e116]: 🕐 Open Now
+          - generic [ref=e117]:
+            - button "Compare" [ref=e118] [cursor=pointer]
+            - button "Details" [ref=e119] [cursor=pointer]
+            - button "Save" [ref=e120] [cursor=pointer]
+        - generic [ref=e121]:
+          - generic [ref=e122]:
+            - heading "Tel Aviv Promenade" [level=3] [ref=e123]
+            - generic [ref=e124]: "4.7"
+          - paragraph [ref=e125]: Shlomo Lahat Promenade 17, Tel Aviv-Yafo
+          - generic [ref=e126]:
+            - generic [ref=e127]: ⭐ Highly Rated
+            - generic [ref=e128]: 🕐 Open Now
+            - generic [ref=e129]: 👥 Popular
+          - generic [ref=e130]:
+            - button "Compare" [ref=e131] [cursor=pointer]
+            - button "Details" [ref=e132] [cursor=pointer]
+            - button "Save" [ref=e133] [cursor=pointer]
+        - generic [ref=e134]:
+          - generic [ref=e135]:
+            - heading "Dizengoff Square" [level=3] [ref=e136]
+            - generic [ref=e137]: "4.6"
+          - paragraph [ref=e138]: Dizengoff St 92, Tel Aviv-Yafo
+          - generic [ref=e139]:
+            - generic [ref=e140]: ⭐ Highly Rated
+            - generic [ref=e141]: 🕐 Open Now
+            - generic [ref=e142]: 👥 Popular
+          - generic [ref=e143]:
+            - button "Compare" [ref=e144] [cursor=pointer]
+            - button "Details" [ref=e145] [cursor=pointer]
+            - button "Save" [ref=e146] [cursor=pointer]
+        - generic [ref=e147]:
+          - generic [ref=e148]:
+            - heading "Tours Gateway" [level=3] [ref=e149]
+            - generic [ref=e150]: "1"
+          - paragraph [ref=e151]: Tel Aviv-Yafo
+          - generic [ref=e153]: 🕐 Open Now
+          - generic [ref=e154]:
+            - button "Compare" [ref=e155] [cursor=pointer]
+            - button "Details" [ref=e156] [cursor=pointer]
+            - button "Save" [ref=e157] [cursor=pointer]
+        - generic [ref=e158]:
+          - generic [ref=e159]:
+            - heading "Dizengoff Fountain" [level=3] [ref=e160]
+            - generic [ref=e161]: "4.5"
+          - paragraph [ref=e162]: Dizengoff St, Tel Aviv-Yafo
+          - generic [ref=e164]: ⭐ Highly Rated
+          - generic [ref=e165]:
+            - button "Compare" [ref=e166] [cursor=pointer]
+            - button "Details" [ref=e167] [cursor=pointer]
+            - button "Save" [ref=e168] [cursor=pointer]
+        - generic [ref=e169]:
+          - generic [ref=e170]:
+            - heading "Taste Israel" [level=3] [ref=e171]
+            - generic [ref=e172]: "4.4"
+          - paragraph [ref=e173]: Heart of the City, Tel Aviv-Yafo
+          - generic [ref=e175]: 🕐 Open Now
+          - generic [ref=e176]:
+            - button "Compare" [ref=e177] [cursor=pointer]
+            - button "Details" [ref=e178] [cursor=pointer]
+            - button "Save" [ref=e179] [cursor=pointer]
+        - generic [ref=e180]:
+          - generic [ref=e181]:
+            - heading "EZRaider TLV" [level=3] [ref=e182]
+            - generic [ref=e183]: "5"
+          - paragraph [ref=e184]: HaYarkon St 165, Tel Aviv-Yafo
+          - generic [ref=e185]:
+            - generic [ref=e186]: ⭐ Highly Rated
+            - generic [ref=e187]: 🕐 Open Now
+          - generic [ref=e188]:
+            - button "Compare" [ref=e189] [cursor=pointer]
+            - button "Details" [ref=e190] [cursor=pointer]
+            - button "Save" [ref=e191] [cursor=pointer]
+        - generic [ref=e192]:
+          - generic [ref=e193]:
+            - heading "Opera Square" [level=3] [ref=e194]
+            - generic [ref=e195]: "4.9"
+          - paragraph [ref=e196]: Allenby St 1, Tel Aviv-Yafo
+          - generic [ref=e197]:
+            - generic [ref=e198]: ⭐ Highly Rated
+            - generic [ref=e199]: 🕐 Open Now
+          - generic [ref=e200]:
+            - button "Compare" [ref=e201] [cursor=pointer]
+            - button "Details" [ref=e202] [cursor=pointer]
+            - button "Save" [ref=e203] [cursor=pointer]
+        - generic [ref=e204]:
+          - generic [ref=e205]:
+            - heading "המרוץ למטמון" [level=3] [ref=e206]
+            - generic [ref=e207]: N/A
+          - paragraph [ref=e208]: Kikar HaBima 3, Tel Aviv-Yafo
+          - generic [ref=e210]: 🕐 Open Now
+          - generic [ref=e211]:
+            - button "Compare" [ref=e212] [cursor=pointer]
+            - button "Details" [ref=e213] [cursor=pointer]
+            - button "Save" [ref=e214] [cursor=pointer]
+      - generic [ref=e215]:
+        - generic [ref=e216]:
+          - heading "📍 Results Map" [level=3] [ref=e217]
+          - button "Hide Map" [ref=e218] [cursor=pointer]
+        - generic [ref=e220]:
+          - button "Keyboard shortcuts" [ref=e222] [cursor=pointer]
+          - region "Map" [ref=e223]
+          - generic [ref=e224]:
+            - generic [ref=e298]:
+              - generic:
+                - generic:
+                  - button "King Albert Square" [ref=e300] [cursor=pointer]
+                  - button "The White City of Tel Aviv" [ref=e301] [cursor=pointer]
+                  - button "Street Art & Graffiti" [ref=e302] [cursor=pointer]
+                  - button "Palm viewpoint" [ref=e303] [cursor=pointer]
+                  - button "Tel Aviv Promenade" [ref=e304] [cursor=pointer]
+                  - button "Dizengoff Square" [ref=e305] [cursor=pointer]
+                  - button "Tours Gateway" [ref=e306] [cursor=pointer]
+                  - button "Dizengoff Fountain" [ref=e307] [cursor=pointer]
+                  - button "Taste Israel" [ref=e308] [cursor=pointer]
+                  - button "EZRaider TLV" [ref=e309] [cursor=pointer]
+                  - button "Opera Square" [ref=e310] [cursor=pointer]
+                  - button "המרוץ למטמון" [ref=e311] [cursor=pointer]
+            - iframe [ref=e312]:
+              
+            - menubar [ref=e313] [cursor=pointer]:
+              - menuitemradio "Show street map" [checked] [ref=e315] [cursor=pointer]: Map
+              - menuitemradio "Show satellite imagery" [ref=e317] [cursor=pointer]: Satellite
+            - button "Toggle fullscreen view" [ref=e319] [cursor=pointer]
+            - generic:
+              - generic:
+                - button "Map camera controls" [ref=e321] [cursor=pointer]
+                - generic [ref=e323] [cursor=pointer]:
+                  - button "Zoom in" [ref=e324] [cursor=pointer]
+                  - button "Zoom out" [ref=e326] [cursor=pointer]
+            - link "Open this area in Google Maps (opens a new window)" [ref=e328]:
+              - /url: https://maps.google.com/maps?ll=32.081188,34.785411&z=13&t=m&hl=en-US&gl=US&mapclient=apiv3
+              - img "Google" [ref=e330]
+            - generic [ref=e331]:
+              - button "Keyboard shortcuts" [ref=e337] [cursor=pointer]
+              - generic [ref=e343]: Map data ©2025 Mapa GISrael
+              - link "Terms (opens in new tab)" [ref=e348] [cursor=pointer]:
+                - /url: https://www.google.com/intl/en-US_US/help/terms_maps.html
+                - text: Terms
+              - link "Report a map error" [ref=e353]:
+                - /url: https://www.google.com/maps/@32.081188,34.7854111,13z/data=!10m1!1e1!12b1?source=apiv3&rapsrc=apiv3
+  - navigation [ref=e354]:
+    - generic [ref=e355]:
+      - link "🔍 Search" [ref=e356] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e357] [cursor=pointer]: 🔍
+        - generic [ref=e358] [cursor=pointer]: Search
+      - link "🤖 AI Assistant" [ref=e359] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e360] [cursor=pointer]: 🤖
+        - generic [ref=e361] [cursor=pointer]: AI Assistant
+      - link "🗺️ Trip Plan" [ref=e362] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e363] [cursor=pointer]: 🗺️
+        - generic [ref=e364] [cursor=pointer]: Trip Plan
+      - link "👤 Profile" [ref=e365] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e366] [cursor=pointer]: 👤
+        - generic [ref=e367] [cursor=pointer]: Profile
+```

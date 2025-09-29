@@ -1,0 +1,102 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: 🧭
+          - generic [ref=e7]: RoamWise
+        - button "🌓" [ref=e9] [cursor=pointer]
+    - main [ref=e10]:
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - heading "Discover Amazing Places" [level=1] [ref=e14]
+          - paragraph [ref=e15]: AI-powered recommendations tailored just for you
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - heading "🌤️ Current Weather" [level=3] [ref=e19]
+            - button "🔄" [ref=e20] [cursor=pointer]
+          - generic [ref=e22]:
+            - generic [ref=e23]: 🌤️
+            - generic [ref=e24]: Unable to get weather data
+            - generic [ref=e25]: Location access denied
+            - button "Try Again" [ref=e26] [cursor=pointer]
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - heading "🔍 Smart Search" [level=2] [ref=e30]
+            - paragraph [ref=e31]: Powered by o3-mini AI
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - textbox "Search for places and experiences" [ref=e34]
+              - button "Execute search" [disabled] [ref=e35]:
+                - generic [ref=e36]: Search
+              - button "Voice search" [ref=e37] [cursor=pointer]: 🎤
+            - generic [ref=e38]: Enter your search query and press enter or click search
+            - generic [ref=e40]:
+              - generic [ref=e41] [cursor=pointer]:
+                - checkbox "🕐 Open now" [ref=e42]
+                - generic [ref=e43] [cursor=pointer]: 🕐 Open now
+              - generic [ref=e44] [cursor=pointer]:
+                - checkbox "⭐ High rated (4.0+)" [ref=e45]
+                - generic [ref=e46] [cursor=pointer]: ⭐ High rated (4.0+)
+              - generic [ref=e47]:
+                - generic [ref=e48]: "📍 Radius:"
+                - combobox [ref=e49]:
+                  - option "1 km"
+                  - option "2 km" [selected]
+                  - option "5 km"
+                  - option "10 km"
+              - generic [ref=e51] [cursor=pointer]:
+                - checkbox "☔ Rain Plan" [ref=e52]
+                - generic [ref=e53] [cursor=pointer]: ☔ Rain Plan
+            - generic [ref=e54]:
+              - heading "🍕 Food & Drinks" [level=4] [ref=e55]
+              - generic [ref=e56]:
+                - generic [ref=e57] [cursor=pointer]: 🍽️ Restaurants
+                - generic [ref=e58] [cursor=pointer]: 🍕 Pizza
+                - generic [ref=e59] [cursor=pointer]: 🍦 Ice Cream
+                - generic [ref=e60] [cursor=pointer]: ☕ Cafes
+              - heading "🏛️ Attractions & Views" [level=4] [ref=e61]
+              - generic [ref=e62]:
+                - generic [ref=e63] [cursor=pointer]: 🏛️ Attractions
+                - generic [ref=e64] [cursor=pointer]: 🌄 Viewpoints
+                - generic [ref=e65] [cursor=pointer]: 🏛️ Museums
+                - generic [ref=e66] [cursor=pointer]: 🌳 Parks
+              - heading "🚴 Activities" [level=4] [ref=e67]
+              - generic [ref=e68]:
+                - generic [ref=e69] [cursor=pointer]: 🥾 Hiking
+                - generic [ref=e70] [cursor=pointer]: 🚴 Biking
+                - generic [ref=e71] [cursor=pointer]: 🎯 Entertainment
+                - generic [ref=e72] [cursor=pointer]: 🛍️ Shopping
+        - region "Search results" [ref=e73]:
+          - generic [ref=e74]:
+            - generic [ref=e75]:
+              - heading "🤖 AI Ready" [level=3] [ref=e76]
+              - generic [ref=e77]: o3-mini
+            - paragraph [ref=e78]: Your personal AI travel assistant is ready to help you discover amazing places. Try searching for restaurants, attractions, or any travel experience!
+            - generic [ref=e79]:
+              - generic [ref=e80]: 🧠 Powered by advanced AI
+              - generic [ref=e81]: ⚡ Real-time recommendations
+    - navigation [ref=e82]:
+      - generic [ref=e83]:
+        - link "🔍 Search" [ref=e84] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e85] [cursor=pointer]: 🔍
+          - generic [ref=e86] [cursor=pointer]: Search
+        - link "🤖 AI Assistant" [ref=e87] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e88] [cursor=pointer]: 🤖
+          - generic [ref=e89] [cursor=pointer]: AI Assistant
+        - link "🗺️ Trip Plan" [ref=e90] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e91] [cursor=pointer]: 🗺️
+          - generic [ref=e92] [cursor=pointer]: Trip Plan
+        - link "👤 Profile" [ref=e93] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e94] [cursor=pointer]: 👤
+          - generic [ref=e95] [cursor=pointer]: Profile
+  - generic [ref=e96]: 📍 Requesting your location for personalized results...
+  - generic [ref=e97]: Location access denied. Please allow location access for personalized travel recommendations.
+```

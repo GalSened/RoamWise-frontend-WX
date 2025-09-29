@@ -1,0 +1,284 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 🧭
+        - generic [ref=e7]: RoamWise
+      - button "🌓" [ref=e9] [cursor=pointer]
+  - main [ref=e10]:
+    - generic [ref=e12]:
+      - generic [ref=e13]:
+        - heading "Discover Amazing Places" [level=1] [ref=e14]
+        - paragraph [ref=e15]: AI-powered recommendations tailored just for you
+      - generic [ref=e17]:
+        - generic [ref=e18]:
+          - heading "🌤️ Current Weather" [level=3] [ref=e19]
+          - button "🔄" [ref=e20] [cursor=pointer]
+        - generic [ref=e22]:
+          - generic [ref=e23]: 🌤️
+          - generic [ref=e24]: Unable to get weather data
+          - generic [ref=e25]: Location access denied
+          - button "Try Again" [ref=e26] [cursor=pointer]
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - heading "🔍 Smart Search" [level=2] [ref=e30]
+          - paragraph [ref=e31]: Powered by o3-mini AI
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - textbox "Search for places and experiences" [ref=e34]: restaurants near me
+            - button "Execute search" [ref=e35] [cursor=pointer]:
+              - generic [ref=e36] [cursor=pointer]: Search
+            - button "Voice search" [ref=e37] [cursor=pointer]: 🎤
+            - button "Clear search" [ref=e38] [cursor=pointer]: ✕
+          - generic [ref=e39]: Enter your search query and press enter or click search
+          - generic [ref=e41]:
+            - generic [ref=e42] [cursor=pointer]:
+              - checkbox "🕐 Open now" [ref=e43]
+              - generic [ref=e44] [cursor=pointer]: 🕐 Open now
+            - generic [ref=e45] [cursor=pointer]:
+              - checkbox "⭐ High rated (4.0+)" [ref=e46]
+              - generic [ref=e47] [cursor=pointer]: ⭐ High rated (4.0+)
+            - generic [ref=e48]:
+              - generic [ref=e49]: "📍 Radius:"
+              - combobox [ref=e50]:
+                - option "1 km"
+                - option "2 km" [selected]
+                - option "5 km"
+                - option "10 km"
+            - generic [ref=e52] [cursor=pointer]:
+              - checkbox "☔ Rain Plan" [ref=e53]
+              - generic [ref=e54] [cursor=pointer]: ☔ Rain Plan
+          - generic [ref=e55]:
+            - heading "🍕 Food & Drinks" [level=4] [ref=e56]
+            - generic [ref=e57]:
+              - generic [ref=e58] [cursor=pointer]: 🍽️ Restaurants
+              - generic [ref=e59] [cursor=pointer]: 🍕 Pizza
+              - generic [ref=e60] [cursor=pointer]: 🍦 Ice Cream
+              - generic [ref=e61] [cursor=pointer]: ☕ Cafes
+            - heading "🏛️ Attractions & Views" [level=4] [ref=e62]
+            - generic [ref=e63]:
+              - generic [ref=e64] [cursor=pointer]: 🏛️ Attractions
+              - generic [ref=e65] [cursor=pointer]: 🌄 Viewpoints
+              - generic [ref=e66] [cursor=pointer]: 🏛️ Museums
+              - generic [ref=e67] [cursor=pointer]: 🌳 Parks
+            - heading "🚴 Activities" [level=4] [ref=e68]
+            - generic [ref=e69]:
+              - generic [ref=e70] [cursor=pointer]: 🥾 Hiking
+              - generic [ref=e71] [cursor=pointer]: 🚴 Biking
+              - generic [ref=e72] [cursor=pointer]: 🎯 Entertainment
+              - generic [ref=e73] [cursor=pointer]: 🛍️ Shopping
+      - region "Search results" [ref=e74]:
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - heading "Little Prague Restaurant" [level=3] [ref=e77]
+            - generic [ref=e78]: "4.4"
+          - paragraph [ref=e79]: Ben Yehuda St 148, Tel Aviv-Yafo
+          - generic [ref=e80]:
+            - generic [ref=e81]: 🕐 Open Now
+            - generic [ref=e82]: 👥 Popular
+          - generic [ref=e83]:
+            - button "Compare" [ref=e84] [cursor=pointer]
+            - button "Details" [ref=e85] [cursor=pointer]
+            - button "Save" [ref=e86] [cursor=pointer]
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - heading "Under the Tree" [level=3] [ref=e89]
+            - generic [ref=e90]: "4.7"
+          - paragraph [ref=e91]: Ben Yehuda St 202, Tel Aviv-Yafo
+          - generic [ref=e92]:
+            - generic [ref=e93]: ⭐ Highly Rated
+            - generic [ref=e94]: 🕐 Open Now
+            - generic [ref=e95]: 👥 Popular
+          - generic [ref=e96]:
+            - button "Compare" [ref=e97] [cursor=pointer]
+            - button "Details" [ref=e98] [cursor=pointer]
+            - button "Save" [ref=e99] [cursor=pointer]
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - heading "La Shuk" [level=3] [ref=e102]
+            - generic [ref=e103]: "4.5"
+          - paragraph [ref=e104]: Dizengoff St 92, Tel Aviv-Yafo
+          - generic [ref=e105]:
+            - generic [ref=e106]: ⭐ Highly Rated
+            - generic [ref=e107]: 🕐 Open Now
+            - generic [ref=e108]: 👥 Popular
+          - generic [ref=e109]:
+            - button "Compare" [ref=e110] [cursor=pointer]
+            - button "Details" [ref=e111] [cursor=pointer]
+            - button "Save" [ref=e112] [cursor=pointer]
+        - generic [ref=e113]:
+          - generic [ref=e114]:
+            - heading "Benz Brothers" [level=3] [ref=e115]
+            - generic [ref=e116]: "4.6"
+          - paragraph [ref=e117]: Shlomo Ibn Gabirol St 37, Tel Aviv-Yafo
+          - generic [ref=e118]:
+            - generic [ref=e119]: ⭐ Highly Rated
+            - generic [ref=e120]: 🕐 Open Now
+            - generic [ref=e121]: 👥 Popular
+          - generic [ref=e122]:
+            - button "Compare" [ref=e123] [cursor=pointer]
+            - button "Details" [ref=e124] [cursor=pointer]
+            - button "Save" [ref=e125] [cursor=pointer]
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - heading "Oh Mama! Ben Yehuda St" [level=3] [ref=e128]
+            - generic [ref=e129]: "4.4"
+          - paragraph [ref=e130]: Ben Yehuda St 69, Tel Aviv-Yafo
+          - generic [ref=e132]: 🕐 Open Now
+          - generic [ref=e133]:
+            - button "Compare" [ref=e134] [cursor=pointer]
+            - button "Details" [ref=e135] [cursor=pointer]
+            - button "Save" [ref=e136] [cursor=pointer]
+        - generic [ref=e137]:
+          - generic [ref=e138]:
+            - heading "Lai fu ליי פו דים סאם וסושי בר" [level=3] [ref=e139]
+            - generic [ref=e140]: "4.4"
+          - paragraph [ref=e141]: Bograshov St 31, Tel Aviv-Yafo
+          - generic [ref=e143]: 🕐 Open Now
+          - generic [ref=e144]:
+            - button "Compare" [ref=e145] [cursor=pointer]
+            - button "Details" [ref=e146] [cursor=pointer]
+            - button "Save" [ref=e147] [cursor=pointer]
+        - generic [ref=e148]:
+          - generic [ref=e149]:
+            - heading "Villa Mare" [level=3] [ref=e150]
+            - generic [ref=e151]: "4.7"
+          - paragraph [ref=e152]: Retsif Herbert Samuel St 88, Tel Aviv-Yafo
+          - generic [ref=e153]:
+            - generic [ref=e154]: ⭐ Highly Rated
+            - generic [ref=e155]: 🕐 Open Now
+            - generic [ref=e156]: 👥 Popular
+          - generic [ref=e157]:
+            - button "Compare" [ref=e158] [cursor=pointer]
+            - button "Details" [ref=e159] [cursor=pointer]
+            - button "Save" [ref=e160] [cursor=pointer]
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - heading "Fat Cow" [level=3] [ref=e163]
+            - generic [ref=e164]: "4.3"
+          - paragraph [ref=e165]: Dizengoff St 265, Tel Aviv-Yafo
+          - generic [ref=e166]:
+            - generic [ref=e167]: 🕐 Open Now
+            - generic [ref=e168]: 👥 Popular
+          - generic [ref=e169]:
+            - button "Compare" [ref=e170] [cursor=pointer]
+            - button "Details" [ref=e171] [cursor=pointer]
+            - button "Save" [ref=e172] [cursor=pointer]
+        - generic [ref=e173]:
+          - generic [ref=e174]:
+            - heading "חוף לה מר תל-אביב | La Mer Beach Tel Aviv" [level=3] [ref=e175]
+            - generic [ref=e176]: "4"
+          - paragraph [ref=e177]: Retsif Herbert Samuel St 91, Tel Aviv-Yafo
+          - generic [ref=e178]:
+            - generic [ref=e179]: 🕐 Open Now
+            - generic [ref=e180]: 👥 Popular
+          - generic [ref=e181]:
+            - button "Compare" [ref=e182] [cursor=pointer]
+            - button "Details" [ref=e183] [cursor=pointer]
+            - button "Save" [ref=e184] [cursor=pointer]
+        - generic [ref=e185]:
+          - generic [ref=e186]:
+            - heading "Porter & Sons" [level=3] [ref=e187]
+            - generic [ref=e188]: "4.5"
+          - paragraph [ref=e189]: HaArba'a St 14, Tel Aviv-Yafo
+          - generic [ref=e190]:
+            - generic [ref=e191]: ⭐ Highly Rated
+            - generic [ref=e192]: 🕐 Open Now
+            - generic [ref=e193]: 👥 Popular
+          - generic [ref=e194]:
+            - button "Compare" [ref=e195] [cursor=pointer]
+            - button "Details" [ref=e196] [cursor=pointer]
+            - button "Save" [ref=e197] [cursor=pointer]
+        - generic [ref=e198]:
+          - generic [ref=e199]:
+            - heading "Goocha Dizengoff" [level=3] [ref=e200]
+            - generic [ref=e201]: "4.5"
+          - paragraph [ref=e202]: Dizengoff St 171, Tel Aviv-Yafo
+          - generic [ref=e203]:
+            - generic [ref=e204]: ⭐ Highly Rated
+            - generic [ref=e205]: 🕐 Open Now
+            - generic [ref=e206]: 👥 Popular
+          - generic [ref=e207]:
+            - button "Compare" [ref=e208] [cursor=pointer]
+            - button "Details" [ref=e209] [cursor=pointer]
+            - button "Save" [ref=e210] [cursor=pointer]
+        - generic [ref=e211]:
+          - generic [ref=e212]:
+            - heading "Holstein Burger" [level=3] [ref=e213]
+            - generic [ref=e214]: "4.5"
+          - paragraph [ref=e215]: Yom Tov St 17, Tel Aviv-Yafo
+          - generic [ref=e216]:
+            - generic [ref=e217]: ⭐ Highly Rated
+            - generic [ref=e218]: 🕐 Open Now
+          - generic [ref=e219]:
+            - button "Compare" [ref=e220] [cursor=pointer]
+            - button "Details" [ref=e221] [cursor=pointer]
+            - button "Save" [ref=e222] [cursor=pointer]
+      - generic [ref=e223]:
+        - generic [ref=e224]:
+          - heading "📍 Results Map" [level=3] [ref=e225]
+          - button "Hide Map" [ref=e226] [cursor=pointer]
+        - generic [ref=e228]:
+          - button "Keyboard shortcuts" [ref=e230] [cursor=pointer]
+          - region "Map" [ref=e231]
+          - generic [ref=e232]:
+            - generic [ref=e306]:
+              - generic:
+                - generic:
+                  - button "Little Prague Restaurant" [ref=e308] [cursor=pointer]
+                  - button "Under the Tree" [ref=e309] [cursor=pointer]
+                  - button "La Shuk" [ref=e310] [cursor=pointer]
+                  - button "Benz Brothers" [ref=e311] [cursor=pointer]
+                  - button "Oh Mama! Ben Yehuda St" [ref=e312] [cursor=pointer]
+                  - button "Lai fu ליי פו דים סאם וסושי בר" [ref=e313] [cursor=pointer]
+                  - button "Villa Mare" [ref=e314] [cursor=pointer]
+                  - button "Fat Cow" [ref=e315] [cursor=pointer]
+                  - button "חוף לה מר תל-אביב | La Mer Beach Tel Aviv" [ref=e316] [cursor=pointer]
+                  - button "Porter & Sons" [ref=e317] [cursor=pointer]
+                  - button "Goocha Dizengoff" [ref=e318] [cursor=pointer]
+                  - button "Holstein Burger" [ref=e319] [cursor=pointer]
+            - iframe [ref=e320]:
+              
+            - menubar [ref=e321] [cursor=pointer]:
+              - menuitemradio "Show street map" [checked] [ref=e323] [cursor=pointer]: Map
+              - menuitemradio "Show satellite imagery" [ref=e325] [cursor=pointer]: Satellite
+            - button "Toggle fullscreen view" [ref=e327] [cursor=pointer]
+            - generic:
+              - generic:
+                - button "Map camera controls" [ref=e329] [cursor=pointer]
+                - generic [ref=e331] [cursor=pointer]:
+                  - button "Zoom in" [ref=e332] [cursor=pointer]
+                  - button "Zoom out" [ref=e334] [cursor=pointer]
+            - link "Open this area in Google Maps (opens a new window)" [ref=e336]:
+              - /url: https://maps.google.com/maps?ll=32.081583,34.775301&z=13&t=m&hl=en-US&gl=US&mapclient=apiv3
+              - img "Google" [ref=e338]
+            - generic [ref=e339]:
+              - button "Keyboard shortcuts" [ref=e345] [cursor=pointer]
+              - generic [ref=e351]: Map data ©2025 Mapa GISrael
+              - link "Terms (opens in new tab)" [ref=e356] [cursor=pointer]:
+                - /url: https://www.google.com/intl/en-US_US/help/terms_maps.html
+                - text: Terms
+              - link "Report a map error" [ref=e361]:
+                - /url: https://www.google.com/maps/@32.081583,34.775301,13z/data=!10m1!1e1!12b1?source=apiv3&rapsrc=apiv3
+  - navigation [ref=e362]:
+    - generic [ref=e363]:
+      - link "🔍 Search" [ref=e364] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e365] [cursor=pointer]: 🔍
+        - generic [ref=e366] [cursor=pointer]: Search
+      - link "🤖 AI Assistant" [ref=e367] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e368] [cursor=pointer]: 🤖
+        - generic [ref=e369] [cursor=pointer]: AI Assistant
+      - link "🗺️ Trip Plan" [ref=e370] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e371] [cursor=pointer]: 🗺️
+        - generic [ref=e372] [cursor=pointer]: Trip Plan
+      - link "👤 Profile" [ref=e373] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e374] [cursor=pointer]: 👤
+        - generic [ref=e375] [cursor=pointer]: Profile
+```

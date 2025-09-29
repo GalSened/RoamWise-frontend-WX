@@ -569,28 +569,86 @@
 
       <!-- AI Assistant View -->
       <section id="aiView" class="app-view" data-view="ai">
-        <div class="view-header">
-          <h1>🤖 AI Assistant</h1>
-          <p>Voice-powered travel companion</p>
-        </div>
-        
-        <div class="ai-interface">
-          <div class="voice-section">
-            <button id="voiceBtn" class="voice-btn">
-              <span class="voice-icon">🎤</span>
-              <span class="voice-text">Press & Hold to Speak</span>
-            </button>
-            <div id="voiceStatus" class="voice-status"></div>
-            <div id="voiceResponse" class="voice-response"></div>
+        <div class="ai-container">
+          <!-- AI Chat Header -->
+          <div class="ai-header">
+            <div class="ai-title-section">
+              <h1 class="ai-main-title">🧠 AI Travel Assistant</h1>
+              <p class="ai-subtitle">Ask me anything in Hebrew or English • Powered by o3-mini</p>
+            </div>
+            <div class="ai-controls">
+              <button class="ai-control-btn" id="clearChatBtn" title="Clear conversation">
+                🗑️ Clear
+              </button>
+              <button class="ai-control-btn" id="translateBtn" title="Switch language">
+                🌐 עברית/EN
+              </button>
+            </div>
           </div>
-          
-          <div class="quick-actions">
-            <h3>Quick Actions</h3>
-            <div class="action-grid">
-              <button class="action-btn" data-action="find-food">Find Food</button>
-              <button class="action-btn" data-action="weather">Check Weather</button>
-              <button class="action-btn" data-action="navigate">Get Directions</button>
-              <button class="action-btn" data-action="recommend">Recommendations</button>
+
+          <!-- Conversation Area -->
+          <div class="conversation-container">
+            <div class="conversation-messages" id="conversationMessages">
+              <div class="ai-message welcome-message">
+                <div class="message-avatar">🧠</div>
+                <div class="message-content">
+                  <div class="message-text">
+                    <p><strong>שלום! Hi there!</strong> I'm your intelligent travel assistant. I can help you:</p>
+                    <ul>
+                      <li>🔍 Find the best places near you</li>
+                      <li>🗺️ Plan routes and compare travel options</li>
+                      <li>📅 Create multi-day itineraries</li>
+                      <li>🌤️ Check weather and give recommendations</li>
+                      <li>💡 Answer travel questions in context</li>
+                    </ul>
+                    <p>Try asking: <em>"Find me the best pizza open now near Bardolino"</em> or <em>"Plan me a 3-day trip with kids around Lake Garda"</em></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Suggestions -->
+            <div class="quick-suggestions" id="quickSuggestions">
+              <div class="suggestion-chip" data-suggestion="Find me gelato shops open now near my location">
+                🍦 Find gelato nearby
+              </div>
+              <div class="suggestion-chip" data-suggestion="Should I go to Venice today or tomorrow based on weather?">
+                🌤️ Weather advice
+              </div>
+              <div class="suggestion-chip" data-suggestion="Plan me a 2-day trip by car from Lake Garda">
+                📅 Plan a trip
+              </div>
+              <div class="suggestion-chip" data-suggestion="Find the fastest route to Dolomites by car">
+                🗺️ Get directions
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Area -->
+          <div class="input-container">
+            <div class="input-wrapper">
+              <textarea 
+                class="ai-input" 
+                id="aiInput" 
+                placeholder="Ask me anything about travel... (Hebrew/English)"
+                rows="1"
+              ></textarea>
+              <div class="input-actions">
+                <button class="input-btn voice-btn" id="voiceInputBtn" title="Voice input">
+                  🎤
+                </button>
+                <button class="input-btn send-btn" id="sendBtn" title="Send message">
+                  ✈️
+                </button>
+              </div>
+            </div>
+            <div class="input-status" id="inputStatus">
+              <span class="typing-indicator" style="display: none;">
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                <span class="typing-dot"></span>
+                AI is thinking...
+              </span>
             </div>
           </div>
         </div>

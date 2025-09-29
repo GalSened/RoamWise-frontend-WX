@@ -21,9 +21,9 @@ test.describe('Traveling App', () => {
     await page.click('[data-view="ai"]');
     await expect(page.locator('[data-view="ai"]')).toHaveClass(/active/);
 
-    // Navigate to map
-    await page.click('[data-view="map"]');
-    await expect(page.locator('[data-view="map"]')).toHaveClass(/active/);
+    // Navigate to profile
+    await page.click('[data-view="profile"]');
+    await expect(page.locator('[data-view="profile"]')).toHaveClass(/active/);
   });
 
   test('should toggle theme', async ({ page }) => {

@@ -1,0 +1,321 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RoamWise AI Orchestrator Schemas",
+  "definitions": {
+    "PlannerOutput": {
+      "type": "object",
+      "required": ["intent", "parameters", "reasoning"],
+      "properties": {
+        "intent": {
+          "type": "string",
+          "enum": ["plan_day", "plan_multi", "search", "route", "compare_weather", "search_along_route"]
+        },
+        "parameters": {
+          "oneOf": [
+            { "$ref": "#/definitions/SearchParams" },
+            { "$ref": "#/definitions/RouteParams" },
+            { "$ref": "#/definitions/PlanParams" },
+            { "$ref": "#/definitions/CompareParams" }
+          ]
+        },
+        "reasoning": {
+          "type": "string",
+          "description": "Brief explanation of why this intent was chosen"
+        }
+      }
+    },
+    
+    "SearchParams": {
+      "type": "object",
+      "required": ["query", "location"],
+      "properties": {
+        "query": {
+          "type": "string",
+          "description": "What to search for (e.g., 'gelato', 'restaurants')"
+        },
+        "location": {
+          "$ref": "#/definitions/Location"
+        },
+        "filters": {
+          "$ref": "#/definitions/SearchFilters"
+        },
+        "radius": {
+          "type": "number",
+          "minimum": 500,
+          "maximum": 50000,
+          "default": 5000
+        }
+      }
+    },
+    
+    "RouteParams": {
+      "type": "object",
+      "required": ["origin", "destination", "mode"],
+      "properties": {
+        "origin": { "$ref": "#/definitions/Location" },
+        "destination": { "$ref": "#/definitions/Location" },
+        "mode": {
+          "type": "string",
+          "enum": ["driving", "transit", "walking", "bicycling"]
+        },
+        "waypoints": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Location" }
+        },
+        "departure_time": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    
+    "PlanParams": {
+      "type": "object",
+      "required": ["duration", "location", "interests"],
+      "properties": {
+        "duration": {
+          "type": "string",
+          "enum": ["morning", "afternoon", "full_day", "multi_day"]
+        },
+        "location": { "$ref": "#/definitions/Location" },
+        "interests": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["food", "culture", "nature", "shopping", "nightlife", "family", "adventure", "relaxation"]
+          }
+        },
+        "constraints": {
+          "$ref": "#/definitions/PlanConstraints"
+        },
+        "preferences": {
+          "$ref": "#/definitions/UserPreferences"
+        }
+      }
+    },
+    
+    "CompareParams": {
+      "type": "object",
+      "required": ["locations", "criteria"],
+      "properties": {
+        "locations": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Location" },
+          "minItems": 2,
+          "maxItems": 4
+        },
+        "criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["weather", "travel_time", "cost", "attractions", "food", "activities"]
+          }
+        },
+        "timeframe": {
+          "type": "string",
+          "enum": ["now", "today", "tomorrow", "weekend", "next_week"]
+        }
+      }
+    },
+    
+    "Location": {
+      "type": "object",
+      "oneOf": [
+        {
+          "required": ["lat", "lng"],
+          "properties": {
+            "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+            "lng": { "type": "number", "minimum": -180, "maximum": 180 },
+            "name": { "type": "string" }
+          }
+        },
+        {
+          "required": ["query"],
+          "properties": {
+            "query": { "type": "string" },
+            "bounds": {
+              "type": "object",
+              "properties": {
+                "north": { "type": "number" },
+                "south": { "type": "number" },
+                "east": { "type": "number" },
+                "west": { "type": "number" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    
+    "SearchFilters": {
+      "type": "object",
+      "properties": {
+        "openNow": { "type": "boolean" },
+        "minRating": { "type": "number", "minimum": 1, "maximum": 5 },
+        "maxPrice": { "type": "number", "minimum": 1, "maximum": 4 },
+        "types": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["restaurant", "tourist_attraction", "lodging", "gas_station", "pharmacy", "museum", "park", "shopping_mall"]
+          }
+        },
+        "dietary": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["vegetarian", "vegan", "gluten_free", "kosher", "halal"]
+          }
+        }
+      }
+    },
+    
+    "PlanConstraints": {
+      "type": "object",
+      "properties": {
+        "pace": {
+          "type": "string",
+          "enum": ["slow", "balanced", "fast"],
+          "default": "balanced"
+        },
+        "maxWalkingDistanceM": {
+          "type": "number",
+          "minimum": 200,
+          "maximum": 5000,
+          "default": 1200
+        },
+        "timeWindow": {
+          "type": "object",
+          "properties": {
+            "start": { "type": "string", "pattern": "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" },
+            "end": { "type": "string", "pattern": "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$" }
+          }
+        },
+        "budget": {
+          "type": "object",
+          "properties": {
+            "perPerson": { "type": "number", "minimum": 0 },
+            "currency": { "type": "string", "default": "EUR" }
+          }
+        },
+        "mobility": {
+          "type": "string",
+          "enum": ["full", "limited", "wheelchair"],
+          "default": "full"
+        }
+      }
+    },
+    
+    "UserPreferences": {
+      "type": "object",
+      "properties": {
+        "travelMode": {
+          "type": "string",
+          "enum": ["car", "transit", "mixed"],
+          "default": "mixed"
+        },
+        "groupType": {
+          "type": "string",
+          "enum": ["solo", "couple", "family", "friends", "business"],
+          "default": "solo"
+        },
+        "language": {
+          "type": "string",
+          "enum": ["en", "he", "auto"],
+          "default": "auto"
+        },
+        "previousVisits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "placeId": { "type": "string" },
+              "rating": { "type": "number", "minimum": 1, "maximum": 5 },
+              "visitDate": { "type": "string", "format": "date" }
+            }
+          }
+        },
+        "interests": {
+          "type": "object",
+          "properties": {
+            "food": { "type": "number", "minimum": 0, "maximum": 1 },
+            "culture": { "type": "number", "minimum": 0, "maximum": 1 },
+            "nature": { "type": "number", "minimum": 0, "maximum": 1 },
+            "shopping": { "type": "number", "minimum": 0, "maximum": 1 },
+            "nightlife": { "type": "number", "minimum": 0, "maximum": 1 }
+          }
+        }
+      }
+    },
+    
+    "CriticOutput": {
+      "type": "object",
+      "required": ["verdict", "issues", "suggestions"],
+      "properties": {
+        "verdict": {
+          "type": "string",
+          "enum": ["approved", "needs_revision", "rejected"]
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["timing", "weather", "distance", "availability", "cost", "accessibility"]
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["low", "medium", "high", "critical"]
+              },
+              "description": { "type": "string" },
+              "affectedItems": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
+        "suggestions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "action": {
+                "type": "string",
+                "enum": ["swap", "reschedule", "add_buffer", "change_mode", "add_alternative"]
+              },
+              "target": { "type": "string" },
+              "reason": { "type": "string" }
+            }
+          }
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    
+    "ToolResponse": {
+      "type": "object",
+      "required": ["success", "data"],
+      "properties": {
+        "success": { "type": "boolean" },
+        "data": {},
+        "error": { "type": "string" },
+        "metadata": {
+          "type": "object",
+          "properties": {
+            "requestId": { "type": "string" },
+            "timestamp": { "type": "string", "format": "date-time" },
+            "processingTimeMs": { "type": "number" },
+            "apiCost": { "type": "number" }
+          }
+        }
+      }
+    }
+  }
+}

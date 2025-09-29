@@ -1,712 +1,3810 @@
-<!doctype html>
-<html lang="en" dir="ltr" data-theme="light">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RoamWise — AI-Powered Travel Planner</title>
-  <meta name="description" content="Smart travel planning with o3-mini AI integration">
-  
-  <!-- PWA -->
-  <meta name="theme-color" content="#0066cc">
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    /* Base styles */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RoamWise • AI Travel Companion</title>
+    <meta name="description" content="Next-generation AI-powered travel planning with o3-mini intelligence">
     
-    body { 
-      font-family: 'Rubik', system-ui, sans-serif;
-      background: #f8fafc;
-      line-height: 1.6;
-    }
+    <!-- Progressive Web App -->
+    <meta name="theme-color" content="#007AFF">
+    <link rel="manifest" href="manifest.json">
     
-    /* App layout */
-    .app-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    <!-- Modern Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
-    /* Header */
-    .app-header {
-      background: white;
-      padding: 1rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .header-brand {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 1.25rem;
-      font-weight: 600;
-      color: #0066cc;
-    }
-    
-    .theme-toggle {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 0.5rem;
-      border-radius: 50%;
-    }
-    
-    /* Main content */
-    .app-main {
-      flex: 1;
-      padding: 2rem 1rem 5rem 1rem;
-      overflow-y: auto;
-    }
-    
-    .app-view {
-      display: none;
-    }
-    
-    .app-view.active {
-      display: block;
-    }
-    
-    /* Search view */
-    .view-header {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    
-    .view-header h1 {
-      font-size: 2rem;
-      color: #1e293b;
-      margin-bottom: 0.5rem;
-    }
-    
-    .search-form {
-      max-width: 600px;
-      margin: 0 auto 2rem;
-    }
-    
-    .search-input-group {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-    }
-    
-    .search-input {
-      flex: 1;
-      padding: 1rem;
-      border: 2px solid #e2e8f0;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    
-    .search-input:focus {
-      border-color: #0066cc;
-    }
-    
-    .search-btn {
-      background: #0066cc;
-      color: white;
-      border: none;
-      padding: 1rem 2rem;
-      border-radius: 0.5rem;
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    
-    .search-btn:hover {
-      background: #0052a3;
-    }
-    
-    .search-btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    
-    .quick-categories {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    
-    .category-btn {
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      padding: 0.5rem 1rem;
-      border-radius: 2rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .category-btn:hover {
-      background: #e2e8f0;
-    }
-    
-    /* Search results */
-    .search-results {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    
-    .search-result {
-      background: white;
-      border-radius: 0.5rem;
-      padding: 1.5rem;
-      margin-bottom: 1rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .search-result h3 {
-      color: #1e293b;
-      margin-bottom: 0.5rem;
-    }
-    
-    .result-rating {
-      color: #64748b;
-      font-size: 0.875rem;
-      margin-top: 0.5rem;
-    }
-    
-    .ai-reason {
-      background: #f0f9ff;
-      padding: 0.75rem;
-      border-radius: 0.25rem;
-      margin-top: 0.5rem;
-      font-size: 0.875rem;
-      color: #0369a1;
-    }
-    
-    /* Trip planning */
-    .trip-form {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .form-group {
-      margin-bottom: 2rem;
-    }
-    
-    .form-group label {
-      display: block;
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-      color: #1e293b;
-    }
-    
-    .duration-options {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    
-    .duration-option {
-      background: #f1f5f9;
-      border: 2px solid #e2e8f0;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .duration-option.selected {
-      background: #0066cc;
-      color: white;
-      border-color: #0066cc;
-    }
-    
-    .interests-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 0.5rem;
-    }
-    
-    .interest-option {
-      background: #f1f5f9;
-      border: 2px solid #e2e8f0;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: center;
-    }
-    
-    .interest-option.selected {
-      background: #0066cc;
-      color: white;
-      border-color: #0066cc;
-    }
-    
-    .budget-slider {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    
-    .budget-slider input {
-      flex: 1;
-    }
-    
-    .budget-display {
-      font-weight: 600;
-      color: #0066cc;
-      font-size: 1.25rem;
-    }
-    
-    .generate-btn {
-      width: 100%;
-      background: #0066cc;
-      color: white;
-      border: none;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      font-size: 1.1rem;
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    
-    .trip-results {
-      max-width: 800px;
-      margin: 2rem auto 0;
-    }
-    
-    .trip-result {
-      background: white;
-      border-radius: 0.5rem;
-      padding: 2rem;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .trip-summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-      margin: 1rem 0;
-    }
-    
-    .trip-stat {
-      text-align: center;
-      padding: 1rem;
-      background: #f8fafc;
-      border-radius: 0.5rem;
-    }
-    
-    .stat-label {
-      display: block;
-      font-size: 0.875rem;
-      color: #64748b;
-      margin-bottom: 0.25rem;
-    }
-    
-    .stat-value {
-      font-weight: 600;
-      color: #1e293b;
-      font-size: 1.1rem;
-    }
-    
-    /* Navigation */
-    .bottom-nav {
-      display: flex !important;
-      background: white;
-      box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-      padding: 0.5rem;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    .nav-btn {
-      flex: 1;
-      background: none;
-      border: none;
-      padding: 0.75rem 0.5rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
-      transition: color 0.2s;
-      color: #64748b;
-    }
-    
-    .nav-btn.active {
-      color: #0066cc;
-    }
-    
-    .nav-icon {
-      font-size: 1.25rem;
-    }
-    
-    .nav-label {
-      font-size: 0.75rem;
-      font-weight: 500;
-    }
-    
-    /* AI Assistant */
-    .ai-interface {
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .voice-section {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    
-    .voice-btn {
-      background: linear-gradient(135deg, #0066cc, #3b82f6);
-      color: white;
-      border: none;
-      padding: 2rem;
-      border-radius: 1rem;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      margin: 0 auto;
-      transition: transform 0.2s;
-    }
-    
-    .voice-btn:hover {
-      transform: scale(1.05);
-    }
-    
-    .voice-icon {
-      font-size: 2rem;
-    }
-    
-    .voice-text {
-      font-weight: 500;
-    }
-    
-    .quick-actions {
-      margin-top: 2rem;
-    }
-    
-    .action-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 1rem;
-    }
-    
-    .action-btn {
-      background: white;
-      border: 2px solid #e2e8f0;
-      padding: 1rem;
-      border-radius: 0.5rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      font-weight: 500;
-    }
-    
-    .action-btn:hover {
-      border-color: #0066cc;
-      color: #0066cc;
-    }
-    
-    /* Responsive design */
-    @media (max-width: 768px) {
-      .app-main {
-        padding: 1rem 0.5rem;
-      }
-      
-      .search-input-group {
-        flex-direction: column;
-      }
-      
-      .duration-options {
-        justify-content: center;
-      }
-      
-      .interests-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    
-    /* Force visibility - override any external CSS */
-    .app-view.active {
-      display: block !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-      transform: none !important;
-    }
-    
-    #searchView {
-      display: block !important;
-      opacity: 1 !important;
-      visibility: visible !important;
-    }
-  </style>
-  <script type="module" crossorigin src="/roamwise-app/assets/index.simple-BMXtb2UU.js"></script>
-<link rel="manifest" href="/roamwise-app/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/roamwise-app/registerSW.js"></script></head>
-<body>
-  <div class="app-container">
-    <!-- Header -->
-    <header class="app-header">
-      <div class="header-brand">
-        <span>🧭</span>
-        <span>RoamWise</span>
-      </div>
-      <button id="themeToggle" class="theme-toggle">🌓</button>
-    </header>
+    <style>
+        :root {
+            /* iOS 26 Inspired Light Blue & Green Palette */
+            --primary: #007AFF;
+            --primary-dark: #0056CC;
+            --primary-light: #66B2FF;
+            --secondary: #34C759;
+            --secondary-dark: #30B354;
+            --secondary-light: #66D484;
+            --accent: #00C7BE;
+            --accent-light: #4DDDD8;
+            --success: #34C759;
+            --danger: #FF3B30;
+            --warning: #FF9500;
+            --dark: #000000;
+            --gray-900: #1C1C1E;
+            --gray-800: #2C2C2E;
+            --gray-700: #3A3A3C;
+            --gray-600: #48484A;
+            --gray-500: #636366;
+            --gray-400: #8E8E93;
+            --gray-300: #C7C7CC;
+            --gray-200: #D1D1D6;
+            --gray-100: #F2F2F7;
+            --gray-50: #F8F9FA;
+            --white: #FFFFFF;
+            
+            /* Cutting-edge iOS 26 gradients */
+            --gradient-primary: linear-gradient(135deg, #007AFF 0%, #00C7BE 50%, #34C759 100%);
+            --gradient-secondary: linear-gradient(135deg, #34C759 0%, #00C7BE 100%);
+            --gradient-accent: linear-gradient(135deg, #00C7BE 0%, #007AFF 100%);
+            --gradient-surface: linear-gradient(135deg, #F8F9FA 0%, #FFFFFF 100%);
+            --gradient-dark: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            
+            /* iOS 26 Modern Shadows */
+            --shadow-sm: 0 1px 3px 0 rgba(0, 122, 255, 0.08);
+            --shadow-md: 0 4px 12px -2px rgba(0, 122, 255, 0.12), 0 2px 8px -2px rgba(52, 199, 89, 0.08);
+            --shadow-lg: 0 12px 24px -4px rgba(0, 122, 255, 0.15), 0 4px 16px -4px rgba(0, 199, 190, 0.1);
+            --shadow-xl: 0 24px 48px -8px rgba(0, 122, 255, 0.18), 0 8px 32px -8px rgba(52, 199, 89, 0.12);
+            --shadow-glow: 0 0 20px rgba(0, 122, 255, 0.3);
+            
+            /* iOS 26 Border Radius */
+            --radius: 1rem;
+            --radius-sm: 0.75rem;
+            --radius-lg: 1.5rem;
+            --radius-xl: 2rem;
+            
+            /* Glassmorphism blur */
+            --blur: blur(20px);
+            --blur-sm: blur(12px);
+            
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
 
-    <!-- Main Content -->
-    <main class="app-main">
-      <!-- Search View -->
-      <section id="searchView" class="app-view active" data-view="search">
-        <div class="view-header">
-          <h1>🔍 Find Places</h1>
-          <p>Discover amazing places with AI-powered recommendations</p>
-        </div>
-        
-        <div class="search-form">
-          <div class="search-input-group">
-            <input 
-              type="text" 
-              id="freeText" 
-              placeholder="What are you looking for?"
-              class="search-input"
-            >
-            <button id="searchBtn" class="search-btn">Search</button>
-          </div>
-          
-          <div class="quick-categories">
-            <button class="category-btn" data-category="restaurant">🍽️ Food</button>
-            <button class="category-btn" data-category="attraction">🏛️ Sights</button>
-            <button class="category-btn" data-category="shopping">🛍️ Shopping</button>
-            <button class="category-btn" data-category="entertainment">🎯 Fun</button>
-          </div>
-        </div>
-        
-        <div id="list" class="search-results">
-          <div class="search-result">
-            <h3>🔍 Ready to Search</h3>
-            <p>Enter what you're looking for above and our AI will find personalized recommendations!</p>
-            <div class="result-rating">🤖 Powered by o3-mini Personal AI</div>
-          </div>
-        </div>
-      </section>
+        /* ENTERPRISE SAAS DESIGN SYSTEM */
+        *, *::before, *::after {
+            --gray-900: #0f172a !important;
+            --gray-800: #1e293b !important;
+            --gray-700: #334155 !important;
+            --gray-600: #475569 !important;
+            --gray-500: #64748b !important;
+        }
 
-      <!-- Trip Planning View -->
-      <section id="tripView" class="app-view" data-view="trip">
-        <div class="view-header">
-          <h1>🗺️ Plan Your Trip</h1>
-          <p>AI-powered trip planning with personalized recommendations</p>
-        </div>
-        
-        <div class="trip-form">
-          <div class="form-group">
-            <label>Trip Duration</label>
-            <div class="duration-options">
-              <button class="duration-option" data-duration="2">2 hours</button>
-              <button class="duration-option selected" data-duration="8">Full day</button>
-              <button class="duration-option" data-duration="16">Weekend</button>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Interests (max 4)</label>
-            <div class="interests-grid">
-              <button class="interest-option" data-interest="food">🍽️ Food</button>
-              <button class="interest-option" data-interest="nature">🌿 Nature</button>
-              <button class="interest-option" data-interest="culture">🏛️ Culture</button>
-              <button class="interest-option" data-interest="shopping">🛍️ Shopping</button>
-              <button class="interest-option" data-interest="entertainment">🎯 Entertainment</button>
-              <button class="interest-option" data-interest="relaxation">😌 Relaxation</button>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Budget per person</label>
-            <div class="budget-slider">
-              <input type="range" id="budgetRange" min="50" max="1000" value="300">
-              <div class="budget-display">$<span id="budgetAmount">300</span></div>
-            </div>
-          </div>
-          
-          <button id="generateTripBtn" class="generate-btn">
-            🤖 Generate Smart Trip
-          </button>
-        </div>
-        
-        <div id="enhancedTripDisplay" class="trip-results">
-          <div class="trip-result">
-            <h3>🗺️ AI Trip Planning</h3>
-            <p>Configure your preferences above and generate a personalized itinerary!</p>
-            <div class="trip-summary">
-              <div class="trip-stat">
-                <span class="stat-label">AI Model:</span>
-                <span class="stat-value">o3-mini</span>
-              </div>
-              <div class="trip-stat">
-                <span class="stat-label">Status:</span>
-                <span class="stat-value">Ready</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        /* Enterprise Card System */
+        .interest-chip, .duration-option, .category-card, .mode-option, .pace-option,
+        [class*="chip"], [class*="option"], [class*="card"] {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(0, 122, 255, 0.08) !important;
+            border-radius: 16px !important;
+            box-shadow: 
+                0 1px 3px rgba(0, 0, 0, 0.05),
+                0 4px 16px rgba(0, 122, 255, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+            color: var(--gray-700) !important;
+            font-weight: 600 !important;
+            padding: 14px 20px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            backdrop-filter: blur(8px) !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
 
-      <!-- AI Assistant View -->
-      <section id="aiView" class="app-view" data-view="ai">
-        <div class="view-header">
-          <h1>🤖 AI Assistant</h1>
-          <p>Voice-powered travel companion</p>
-        </div>
-        
-        <div class="ai-interface">
-          <div class="voice-section">
-            <button id="voiceBtn" class="voice-btn">
-              <span class="voice-icon">🎤</span>
-              <span class="voice-text">Press & Hold to Speak</span>
-            </button>
-            <div id="voiceStatus" class="voice-status"></div>
-            <div id="voiceResponse" class="voice-response"></div>
-          </div>
-          
-          <div class="quick-actions">
-            <h3>Quick Actions</h3>
-            <div class="action-grid">
-              <button class="action-btn" data-action="find-food">Find Food</button>
-              <button class="action-btn" data-action="weather">Check Weather</button>
-              <button class="action-btn" data-action="navigate">Get Directions</button>
-              <button class="action-btn" data-action="recommend">Recommendations</button>
-            </div>
-          </div>
-        </div>
-      </section>
+        /* Hover Effects */
+        .interest-chip:hover, .duration-option:hover, .category-card:hover, 
+        .mode-option:hover, .pace-option:hover {
+            transform: translateY(-2px) !important;
+            border-color: rgba(0, 122, 255, 0.15) !important;
+            box-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.08),
+                0 8px 32px rgba(0, 122, 255, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%) !important;
+        }
 
-      <!-- Profile View -->
-      <section id="profileView" class="app-view" data-view="profile">
-        <div class="view-header">
-          <h1>👤 Profile</h1>
-          <p>Your travel preferences and history</p>
-        </div>
-        
-        <div class="profile-content">
-          <div class="trip-result">
-            <h3>Your Stats</h3>
-            <div class="trip-summary">
-              <div class="trip-stat">
-                <span class="stat-label">Trips Planned</span>
-                <span class="stat-value">0</span>
-              </div>
-              <div class="trip-stat">
-                <span class="stat-label">Places Visited</span>
-                <span class="stat-value">0</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
+        /* Selected/Active States */
+        .interest-chip.selected, .duration-option.selected, .category-card.selected,
+        .mode-option.selected, .pace-option.selected,
+        .interest-chip:active, .duration-option:active, .category-card:active {
+            background: linear-gradient(145deg, var(--primary) 0%, #0056cc 100%) !important;
+            color: rgba(255, 255, 255, 0.95) !important;
+            border-color: var(--primary) !important;
+            box-shadow: 
+                0 4px 12px rgba(0, 122, 255, 0.3),
+                0 2px 8px rgba(0, 122, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+            transform: translateY(-1px) !important;
+        }
 
-    <!-- Bottom Navigation -->
-    <nav class="bottom-nav">
-      <button class="nav-btn active" data-view="search">
-        <span class="nav-icon">🔍</span>
-        <span class="nav-label">Search</span>
-      </button>
-      <button class="nav-btn" data-view="ai">
-        <span class="nav-icon">🤖</span>
-        <span class="nav-label">AI</span>
-      </button>
-      <button class="nav-btn" data-view="trip">
-        <span class="nav-icon">🗺️</span>
-        <span class="nav-label">Trip</span>
-      </button>
-      <button class="nav-btn" data-view="profile">
-        <span class="nav-icon">👤</span>
-        <span class="nav-label">Profile</span>
-      </button>
-    </nav>
-  </div>
+        /* Lighter text for dark button content */
+        .interest-chip.selected *, .duration-option.selected *, .category-card.selected *,
+        .mode-option.selected *, .pace-option.selected * {
+            color: rgba(255, 255, 255, 0.9) !important;
+            opacity: 0.95 !important;
+        }
 
-  <!-- JavaScript -->
-  
-  <!-- Inline navigation fix for immediate functionality -->
-  <script>
-    console.log('Navigation fallback loading...');
-    
-    // Simple navigation function
-    function setupNavigation() {
-      console.log('Setting up navigation fallback...');
-      
-      const navButtons = document.querySelectorAll('.nav-btn');
-      const views = document.querySelectorAll('.app-view');
-      
-      console.log('Found nav buttons:', navButtons.length);
-      console.log('Found views:', views.length);
-      
-      // Function to show a specific view
-      function showView(viewName) {
-        console.log('Showing view:', viewName);
-        
-        // Hide all views
-        views.forEach(view => {
-          view.classList.remove('active');
-          view.style.display = 'none';
-        });
-        
-        // Show target view
-        const targetView = document.querySelector(`[data-view="${viewName}"]`);
-        if (targetView) {
-          targetView.classList.add('active');
-          targetView.style.display = 'block';
-          console.log('View activated:', viewName);
-        } else {
-          console.error('View not found:', viewName);
+        /* Button Enhancement */
+        button, .button, .btn {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(0, 122, 255, 0.1) !important;
+            border-radius: 12px !important;
+            color: var(--gray-700) !important;
+            font-weight: 600 !important;
+            padding: 12px 24px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 
+                0 1px 3px rgba(0, 0, 0, 0.05),
+                0 2px 8px rgba(0, 122, 255, 0.03) !important;
+            position: relative !important;
+            overflow: hidden !important;
+        }
+
+        button:hover, .button:hover, .btn:hover {
+            transform: translateY(-1px) !important;
+            border-color: rgba(0, 122, 255, 0.2) !important;
+            box-shadow: 
+                0 2px 6px rgba(0, 0, 0, 0.08),
+                0 4px 16px rgba(0, 122, 255, 0.08) !important;
+            background: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%) !important;
+        }
+
+        /* Premium Glassmorphism Effects */
+        .interest-chip::before, .category-card::before, .mode-option::before {
+            content: '' !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: -100% !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent) !important;
+            transition: left 0.6s !important;
+        }
+
+        .interest-chip:hover::before, .category-card:hover::before, .mode-option:hover::before {
+            left: 100% !important;
+        }
+
+        /* Typography Enhancement */
+        .interest-chip, .category-card, .mode-option {
+            font-size: 14px !important;
+            letter-spacing: 0.025em !important;
+            text-align: center !important;
+            line-height: 1.5 !important;
+        }
+
+        /* Icon Enhancement */
+        .interest-chip > span:first-child, .category-card > span:first-child {
+            font-size: 18px !important;
+            margin-right: 8px !important;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1)) !important;
+        }
+
+        /* Section Headers - Premium Typography */
+        h1, h2, h3, h4, h5, h6 {
+            background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-700) 100%) !important;
+            background-clip: text !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.025em !important;
+            line-height: 1.2 !important;
+            margin-bottom: 12px !important;
+        }
+
+        /* Section Styling */
+        .interest-section, .duration-section, .mode-section, .pace-section {
+            background: linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.95) 100%) !important;
+            border: 1px solid rgba(0, 122, 255, 0.06) !important;
+            border-radius: 20px !important;
+            padding: 24px !important;
+            margin-bottom: 24px !important;
+            box-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.03),
+                0 8px 32px rgba(0, 122, 255, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(12px) !important;
+        }
+
+        /* Grid Layouts Enhancement */
+        .interests-grid, .duration-grid, .mode-grid, .pace-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+            gap: 16px !important;
+            margin-top: 16px !important;
+        }
+
+        /* Special Button Types */
+        .primary-btn, button[type="submit"], .generate-btn {
+            background: linear-gradient(145deg, var(--primary) 0%, #0056cc 100%) !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 14px !important;
+            padding: 16px 32px !important;
+            font-weight: 700 !important;
+            font-size: 15px !important;
+            letter-spacing: 0.025em !important;
+            box-shadow: 
+                0 4px 12px rgba(0, 122, 255, 0.25),
+                0 2px 8px rgba(0, 122, 255, 0.15),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+
+        .primary-btn:hover, button[type="submit"]:hover, .generate-btn:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 
+                0 6px 20px rgba(0, 122, 255, 0.35),
+                0 4px 12px rgba(0, 122, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+            background: linear-gradient(145deg, #0056cc 0%, var(--primary) 100%) !important;
+        }
+
+        /* Input Field Enhancement */
+        input, select, textarea {
+            background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%) !important;
+            border: 1px solid rgba(0, 122, 255, 0.08) !important;
+            border-radius: 12px !important;
+            padding: 12px 16px !important;
+            color: var(--gray-700) !important;
+            font-weight: 500 !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 
+                0 1px 3px rgba(0, 0, 0, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none !important;
+            border-color: var(--primary) !important;
+            box-shadow: 
+                0 0 0 3px rgba(0, 122, 255, 0.1),
+                0 2px 8px rgba(0, 122, 255, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+            background: #ffffff !important;
+        }
+
+        /* Container Enhancement */
+        .app-container, .main-content, .content-wrapper {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f1f5f9 100%) !important;
+            min-height: 100vh !important;
+        }
+
+        /* Header Enhancement */
+        .header, .app-header {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            border-bottom: 1px solid rgba(0, 122, 255, 0.08) !important;
+            box-shadow: 0 1px 20px rgba(0, 0, 0, 0.03) !important;
         }
         
-        // Update navigation buttons
-        navButtons.forEach(button => {
-          button.classList.remove('active');
-          if (button.getAttribute('data-view') === viewName) {
-            button.classList.add('active');
-          }
-        });
-      }
-      
-      // Add click listeners to navigation buttons
-      navButtons.forEach(button => {
-        button.addEventListener('click', () => {
-          const targetView = button.getAttribute('data-view');
-          console.log('Navigation clicked:', targetView);
-          showView(targetView);
-        });
-      });
-      
-      // Show search view by default
-      showView('search');
-    }
-    
-    // Initialize when DOM is ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setupNavigation);
-    } else {
-      setupNavigation();
-    }
-  </script>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #F8F9FA 0%, #E3F2FD 25%, #E8F5E8 50%, #F0F9FF 75%, #FFFFFF 100%);
+            background-attachment: fixed;
+            color: var(--gray-900);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(0, 122, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(52, 199, 89, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 199, 190, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        /* App Layout */
+        .app {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(0, 122, 255, 0.1);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+        
+        .logo-icon {
+            width: 2rem;
+            height: 2rem;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .theme-toggle {
+            background: var(--gray-100);
+            border: none;
+            border-radius: var(--radius);
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.25rem;
+        }
+        
+        .theme-toggle:hover {
+            background: var(--gray-200);
+            transform: scale(1.05);
+        }
+        
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 6rem;
+            width: 100%;
+        }
+        
+        /* Views */
+        .view {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .view.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(1rem); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Cards */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(0, 122, 255, 0.08);
+            backdrop-filter: var(--blur-sm);
+            -webkit-backdrop-filter: var(--blur-sm);
+            overflow: hidden;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--gradient-accent);
+            opacity: 0.6;
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px) scale(1.02);
+            border-color: rgba(0, 122, 255, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(0, 122, 255, 0.1);
+            background: var(--gradient-surface);
+        }
+        
+        .card-body {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+        
+        .card-subtitle {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+            box-shadow: var(--shadow-lg);
+            border-radius: var(--radius);
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+        
+        .btn-secondary {
+            background: var(--white);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-400);
+        }
+        
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+        
+        .btn-full {
+            width: 100%;
+        }
+        
+        /* Search */
+        .search-section {
+            margin-bottom: 3rem;
+        }
+        
+        .search-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(0, 122, 255, 0.12);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .search-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+        }
+        
+        .search-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .search-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .search-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .search-body {
+            padding: 2rem;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .search-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            min-width: 120px;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .search-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .voice-btn, .clear-btn {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .voice-btn:hover, .clear-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray-600);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 20px;
+            background: var(--danger);
+            color: white;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-600);
+        }
+
+        .offline-message {
+            text-align: center;
+            padding: 20px;
+            background: var(--warning);
+            color: white;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .compare-tray {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            padding: 20px;
+            max-width: 300px;
+            z-index: 1000;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            z-index: 1500;
+        }
+
+        .notification.success {
+            background: var(--success);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .suggestion-tag {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .rain-plan-active {
+            background: var(--warning) !important;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .indoor-indicator {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .mobile-layout {
+            display: none;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            margin: 0 4px;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .result-actions {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .explainability-chip {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-layout {
+                display: block;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .voice-btn, .clear-btn {
+                margin-left: 0;
+                margin-top: 8px;
+            }
+
+            .action-btn {
+                flex: 1;
+                min-width: 80px;
+            }
+        }
+        
+        /* Search Options */
+        .search-options {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .search-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .filter-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .filter-toggle input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--primary);
+        }
+        
+        .radius-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .radius-selector select {
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+            font-size: 0.875rem;
+        }
+
+        .quick-filters {
+            margin-bottom: 1rem;
+        }
+        
+        .filter-section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin: 1rem 0 0.75rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .filter-section-title:first-child {
+            margin-top: 0;
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-btn {
+            padding: 1rem;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .filter-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        /* Results */
+        .results {
+            margin-top: 2rem;
+        }
+        
+        .result-item {
+            background: var(--white);
+            border-radius: var(--radius);
+            border: 1px solid var(--gray-200);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: var(--transition);
+        }
+        
+        .result-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .result-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .result-badge {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .result-description {
+            color: var(--gray-600);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .result-meta {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+        
+        .ai-insight {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-top: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .place-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        
+        .place-type-tag {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        /* Route Planning */
+        .route-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .autocomplete-container {
+            position: relative;
+        }
+        
+        .autocomplete-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-top: none;
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow-lg);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+        
+        .autocomplete-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--gray-100);
+            transition: var(--transition);
+        }
+        
+        .autocomplete-item:hover {
+            background: var(--gray-50);
+        }
+        
+        .autocomplete-item:last-child {
+            border-bottom: none;
+        }
+        
+        .route-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .route-results {
+            margin-top: 2rem;
+        }
+        
+        .route-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .route-stat {
+            text-align: center;
+            padding: 1rem;
+            background: var(--gray-50);
+            border-radius: var(--radius);
+        }
+        
+        .route-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .route-stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .route-steps {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .route-step {
+            padding: 1rem;
+            border-bottom: 1px solid var(--gray-100);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .route-step:last-child {
+            border-bottom: none;
+        }
+        
+        .route-step-icon {
+            font-size: 1.25rem;
+            width: 2rem;
+            text-align: center;
+        }
+        
+        .route-step-text {
+            flex: 1;
+            font-size: 0.875rem;
+            color: var(--gray-700);
+        }
+        
+        .weather-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .weather-location-card {
+            background: var(--gradient-secondary);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: var(--radius);
+            text-align: center;
+        }
+        
+        .weather-advice {
+            background: var(--gray-50);
+            padding: 1rem;
+            border-radius: var(--radius);
+            margin-top: 1rem;
+            border-left: 4px solid var(--primary);
+        }
+        
+        /* Favorites */
+        .favorites-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        
+        .favorite-item {
+            transition: var(--transition);
+        }
+        
+        .favorite-item:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .favorite-btn {
+            transition: var(--transition);
+        }
+        
+        .favorite-btn:hover {
+            transform: scale(1.2);
+        }
+        
+        .favorite-btn.favorited {
+            animation: favoriteAdded 0.3s ease-out;
+        }
+        
+        @keyframes favoriteAdded {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+        
+        .remove-favorite {
+            opacity: 0.7;
+            transition: var(--transition);
+        }
+        
+        .remove-favorite:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        /* Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.9);
+            border-top: 1px solid rgba(0, 122, 255, 0.1);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: 0 -4px 12px rgba(0, 122, 255, 0.08);
+            z-index: 50;
+        }
+        
+        .nav-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .nav-item {
+            flex: 1;
+            max-width: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--gray-500);
+            text-decoration: none;
+            gap: 0.25rem;
+        }
+        
+        .nav-item:hover,
+        .nav-item.active {
+            color: var(--primary);
+            background: linear-gradient(135deg, rgba(0, 122, 255, 0.1), rgba(0, 199, 190, 0.05));
+            border-radius: var(--radius);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .nav-icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .nav-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        /* AI Features */
+        .ai-section {
+            margin-bottom: 3rem;
+        }
+        
+        .ai-card {
+            background: var(--gradient-dark);
+            color: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .ai-header {
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gradient-primary);
+            opacity: 0.1;
+        }
+        
+        .ai-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .ai-subtitle {
+            opacity: 0.8;
+            font-size: 1rem;
+            position: relative;
+        }
+        
+        .ai-body {
+            padding: 2rem;
+        }
+        
+        .voice-interface {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .voice-btn {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 3rem;
+            color: var(--white);
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .voice-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .voice-btn.listening {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .voice-status {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            opacity: 0.8;
+        }
+        
+        /* Trip Planning */
+        .trip-section {
+            margin-bottom: 3rem;
+        }
+        
+        .trip-form {
+            display: grid;
+            gap: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        
+        .option-btn {
+            padding: 1rem;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .option-btn.selected {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        .budget-slider {
+            margin-top: 1rem;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: var(--radius-sm);
+            background: var(--gray-200);
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: var(--shadow-md);
+        }
+        
+        .budget-display {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        /* Weather Card */
+        .weather-section {
+            margin-bottom: 2rem;
+        }
+        
+        .weather-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .weather-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-1px);
+        }
+        
+        .weather-header {
+            background: var(--gradient-secondary);
+            color: var(--white);
+            padding: 1.25rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .weather-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .weather-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .weather-refresh {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: var(--radius-sm);
+            transition: var(--transition);
+        }
+        
+        .weather-refresh:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(180deg);
+        }
+        
+        .weather-body {
+            padding: 1.5rem;
+        }
+        
+        .weather-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+        }
+        
+        .weather-content {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .weather-main {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .weather-location {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.25rem;
+        }
+        
+        .weather-temp {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            line-height: 1;
+        }
+        
+        .weather-desc {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            text-transform: capitalize;
+        }
+        
+        .weather-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .weather-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .weather-icon {
+            font-size: 4rem;
+            text-align: center;
+        }
+        
+        .weather-error {
+            text-align: center;
+            color: var(--danger);
+            font-size: 0.875rem;
+            padding: 1rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            color: var(--primary);
+        }
+        
+        .spinner {
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--gray-200);
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .option-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .content {
+                padding: 1rem 1rem 6rem;
+            }
+        }
+        
+        /* Trip Planning Styles */
+        .planning-config {
+            margin-bottom: 3rem;
+        }
+        
+        .config-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid rgba(0, 122, 255, 0.12);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .config-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+        }
+        
+        .config-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .config-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .config-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .config-subtitle {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+        
+        .config-body {
+            padding: 2rem;
+        }
+        
+        .config-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .config-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .config-label {
+            font-weight: 600;
+            color: var(--gray-900);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Duration Grid */
+        .duration-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+        
+        .duration-btn {
+            padding: 0.75rem;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .duration-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            transform: translateY(-1px);
+        }
+        
+        .duration-btn.selected {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Mode Selector */
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .mode-option {
+            padding: 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .mode-option:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .mode-option.selected {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .mode-icon {
+            font-size: 2rem;
+        }
+        
+        .mode-title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .mode-desc {
+            font-size: 0.75rem;
+            opacity: 0.8;
+        }
+        
+        /* Party Inputs */
+        .party-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .party-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .party-field label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+        
+        .party-field select {
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            background: var(--white);
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+        
+        .party-field select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        /* Pace Selector */
+        .pace-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+        
+        .pace-option {
+            padding: 1rem;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .pace-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .pace-option.selected {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        .pace-icon {
+            font-size: 1.5rem;
+        }
+        
+        /* Interests Grid */
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .interest-chip {
+            padding: 0.75rem 1rem;
+            background: var(--gray-50);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+        
+        .interest-chip:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+        
+        .interest-chip.selected {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Preferences Grid */
+        .preferences-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .pref-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .pref-section label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+        
+        .pref-section select {
+            padding: 0.75rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            background: var(--white);
+            font-size: 0.875rem;
+            transition: var(--transition);
+        }
+        
+        .pref-section select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        /* Location Input */
+        .location-input {
+            display: flex;
+            gap: 1rem;
+            align-items: stretch;
+        }
+        
+        .location-field {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--white);
+        }
+        
+        .location-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+        
+        .location-btn {
+            padding: 1rem 1.5rem;
+            background: var(--gradient-secondary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+        
+        .location-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Config Actions */
+        .config-actions {
+            margin-top: 2rem;
+            text-align: center;
+        }
+        
+        .btn-xl {
+            padding: 1.25rem 2.5rem;
+            font-size: 1.125rem;
+            border-radius: var(--radius-lg);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .btn-icon {
+            font-size: 1.25rem;
+        }
+        
+        .generation-status {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            color: var(--primary);
+            font-size: 0.875rem;
+        }
+        
+        .status-spinner {
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid var(--gray-200);
+            border-top: 2px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        /* Itinerary Container */
+        .itinerary-container {
+            margin-top: 3rem;
+        }
+        
+        .itinerary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .itinerary-title h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+        
+        .itinerary-meta {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .itinerary-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        /* Day Tabs */
+        .day-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+        
+        .day-tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--white);
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            white-space: nowrap;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .day-tab:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .day-tab.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        /* Itinerary Content */
+        .itinerary-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            min-height: 600px;
+        }
+        
+        .timeline-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+        
+        .day-timeline {
+            padding: 1.5rem;
+        }
+        
+        .map-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+        
+        .itinerary-map {
+            width: 100%;
+            height: 100%;
+            min-height: 600px;
+            background: var(--gray-100);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        /* Results Map Styles */
+        .results-map-container {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        .map-header h3 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .map-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--white);
+            padding: 0.5rem 1rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .map-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .results-map {
+            width: 100%;
+            height: 400px;
+            background: var(--gray-100);
+        }
+
+        /* Timeline Styles */
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            background: var(--gray-50);
+        }
+        
+        .timeline-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .timeline-weather {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .timeline-slots {
+            padding: 0;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .time-slot {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--gray-100);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .time-slot:hover {
+            background: var(--gray-50);
+        }
+        
+        .time-slot:last-child {
+            border-bottom: none;
+        }
+        
+        .slot-time {
+            flex-shrink: 0;
+            width: 80px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.875rem;
+        }
+        
+        .slot-content {
+            flex: 1;
+            margin-left: 1rem;
+        }
+        
+        .slot-activity {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .activity-icon {
+            flex-shrink: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            background: var(--gradient-primary);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .activity-details {
+            flex: 1;
+        }
+        
+        .activity-title {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.25rem;
+            font-size: 1rem;
+        }
+        
+        .activity-description {
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+        }
+        
+        .activity-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .slot-actions {
+            flex-shrink: 0;
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+        
+        .time-slot:hover .slot-actions {
+            opacity: 1;
+        }
+        
+        .action-btn {
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: var(--gray-200);
+            color: var(--gray-600);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.875rem;
+        }
+        
+        .action-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: scale(1.1);
+        }
+        
+        .action-btn.swap:hover {
+            background: var(--warning);
+        }
+        
+        .action-btn.lock:hover {
+            background: var(--success);
+        }
+        
+        .action-btn.remove:hover {
+            background: var(--danger);
+        }
+        
+        /* Weather Integration */
+        .slot-weather {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: var(--gray-50);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+        }
+        
+        .weather-icon {
+            font-size: 1rem;
+        }
+        
+        .weather-temp {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .weather-advice {
+            color: var(--gray-600);
+            font-style: italic;
+        }
+        
+        /* Route Optimization */
+        .route-indicator {
+            position: absolute;
+            left: 4rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gradient-primary);
+            opacity: 0.3;
+        }
+        
+        .route-dot {
+            position: absolute;
+            left: 3.25rem;
+            top: 1.5rem;
+            width: 3.5rem;
+            height: 1rem;
+            background: var(--primary);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--white);
+            font-weight: 600;
+        }
+        
+        /* Activity Types */
+        .activity-type-food { background: linear-gradient(135deg, #FF6B6B, #FF8E8E); }
+        .activity-type-attraction { background: linear-gradient(135deg, #4ECDC4, #45B7B8); }
+        .activity-type-nature { background: linear-gradient(135deg, #55A3FF, #7B68EE); }
+        .activity-type-culture { background: linear-gradient(135deg, #FFA726, #FFB74D); }
+        .activity-type-shopping { background: linear-gradient(135deg, #AB47BC, #CE93D8); }
+        .activity-type-transport { background: linear-gradient(135deg, #66BB6A, #81C784); }
+        
+        /* Timeline Controls */
+        .timeline-controls {
+            padding: 1rem 1.5rem;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .timeline-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .timeline-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .timeline-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .timeline-btn.primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .timeline-btn.secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+        
+        .timeline-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* Empty State */
+        .timeline-empty {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: var(--gray-500);
+        }
+        
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        .empty-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+        }
+        
+        .empty-description {
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        
+        /* Map Controls */
+        .map-btn {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--gray-300);
+            background: var(--white);
+            color: var(--gray-700);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .map-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--primary);
+        }
+        
+        .map-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        .map-control-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--gray-700);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: var(--shadow-md);
+            backdrop-filter: blur(10px);
+        }
+        
+        .map-control-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            transform: scale(1.05);
+        }
+
+        /* AI Conversation Interface */
+        .ai-container {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--gray-50);
+        }
+        
+        .ai-header {
+            background: var(--white);
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .ai-main-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 0;
+        }
+        
+        .ai-subtitle {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin: 0.25rem 0 0 0;
+        }
+        
+        .ai-controls {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .ai-control-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--gray-300);
+            background: var(--white);
+            color: var(--gray-700);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .ai-control-btn:hover {
+            background: var(--gray-50);
+            border-color: var(--primary);
+        }
+        
+        /* Conversation Area */
+        .conversation-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .conversation-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: var(--gray-50);
+        }
+        
+        .ai-message, .user-message {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            max-width: 100%;
+        }
+        
+        .user-message {
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            flex-shrink: 0;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--white);
+        }
+        
+        .user-message .message-avatar {
+            background: var(--gradient-secondary);
+        }
+        
+        .message-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .message-text {
+            background: var(--white);
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+            word-wrap: break-word;
+        }
+        
+        .user-message .message-text {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        .message-text p {
+            margin: 0 0 0.75rem 0;
+        }
+        
+        .message-text p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .message-text ul {
+            margin: 0.5rem 0;
+            padding-left: 1.25rem;
+        }
+        
+        .message-text li {
+            margin-bottom: 0.25rem;
+        }
+        
+        .welcome-message {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius-lg);
+            margin-bottom: 2rem;
+        }
+        
+        .welcome-message .message-text {
+            background: transparent;
+            color: inherit;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+        }
+        
+        /* Quick Suggestions */
+        .quick-suggestions {
+            padding: 1rem;
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            gap: 0.75rem;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        
+        .suggestion-chip {
+            flex-shrink: 0;
+            padding: 0.75rem 1rem;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .suggestion-chip:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+            transform: translateY(-1px);
+        }
+        
+        /* Input Area */
+        .input-container {
+            background: var(--white);
+            border-top: 1px solid var(--gray-200);
+            padding: 1rem;
+        }
+        
+        .input-wrapper {
+            display: flex;
+            gap: 0.75rem;
+            align-items: flex-end;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-lg);
+            padding: 0.75rem;
+        }
+        
+        .ai-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            resize: none;
+            font-size: 1rem;
+            line-height: 1.5;
+            min-height: 1.5rem;
+            max-height: 8rem;
+            outline: none;
+            font-family: inherit;
+        }
+        
+        .ai-input::placeholder {
+            color: var(--gray-500);
+        }
+        
+        .input-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .input-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        
+        .voice-btn {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+        
+        .voice-btn:hover {
+            background: var(--warning);
+            color: var(--white);
+            transform: scale(1.05);
+        }
+        
+        .voice-btn.recording {
+            background: var(--danger);
+            color: var(--white);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .send-btn {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .send-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+        
+        .send-btn:disabled {
+            background: var(--gray-300);
+            color: var(--gray-500);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-top: 0.5rem;
+        }
+        
+        .typing-dot {
+            width: 0.375rem;
+            height: 0.375rem;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: typingDot 1.4s infinite;
+        }
+        
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typingDot {
+            0%, 60%, 100% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+            30% {
+                transform: scale(1.3);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        /* Message Actions */
+        .message-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            flex-wrap: wrap;
+        }
+        
+        .message-action-btn {
+            padding: 0.5rem 0.75rem;
+            background: var(--gray-100);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .message-action-btn:hover {
+            background: var(--primary);
+            color: var(--white);
+            border-color: var(--primary);
+        }
+        
+        /* Result Cards */
+        .result-cards {
+            display: grid;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .place-card {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 1rem;
+            transition: var(--transition);
+        }
+        
+        .place-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        
+        .place-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+        
+        .place-name {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .place-rating {
+            font-size: 0.875rem;
+            color: var(--warning);
+        }
+        
+        .place-details {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            margin-bottom: 0.75rem;
+        }
+        
+        .place-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .place-action {
+            padding: 0.375rem 0.75rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .place-action:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Dark mode */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --gray-50: #0f172a;
+                --gray-100: #1e293b;
+                --gray-200: #334155;
+                --white: #1e293b;
+            }
+        }
+        
+        /* Responsive Design for Planning */
+        @media (max-width: 768px) {
+            .config-row {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .duration-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .mode-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .preferences-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .location-input {
+                flex-direction: column;
+            }
+            
+            .itinerary-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .itinerary-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .itinerary-actions {
+                align-self: stretch;
+            }
+        }
+
+        /* Place Actions Styles */
+        .place-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 122, 255, 0.1);
+        }
+
+        .place-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 10px;
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .place-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
+        }
+
+        .action-icon {
+            font-size: 12px;
+        }
+
+        .action-text {
+            font-size: 10px;
+        }
+
+        .compare-btn:hover {
+            background: linear-gradient(135deg, #ff8800, #fd7e14);
+            border-color: #ff8800;
+        }
+
+        .details-btn:hover {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(135deg, #22aa44, #28a745);
+            border-color: #22aa44;
+        }
+
+        /* Place Modal Styles */
+        .place-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+
+        .place-modal {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.95));
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .place-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid rgba(0, 122, 255, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .place-modal-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .place-modal-close {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+            border-radius: 8px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .place-modal-close:hover {
+            background: #dc3545;
+            color: white;
+        }
+
+        .place-modal-content {
+            padding: 24px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .place-modal-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .place-info-section {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(0, 122, 255, 0.1);
+        }
+
+        .place-info-section h3 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .place-info-section p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .place-types-modal {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .place-type-tag-modal {
+            display: inline-block;
+            padding: 4px 8px;
+            background: rgba(0, 122, 255, 0.1);
+            color: var(--primary);
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .score-breakdown-detailed {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+        }
+
+        .breakdown-label {
+            min-width: 80px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .breakdown-bar {
+            flex: 1;
+            height: 6px;
+            background: rgba(0, 122, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .breakdown-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .breakdown-value {
+            min-width: 30px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .place-modal-photo {
+            margin-top: 16px;
+        }
+
+        .place-modal-actions {
+            display: flex;
+            gap: 12px;
+            padding: 20px 24px;
+            border-top: 1px solid rgba(0, 122, 255, 0.1);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .modal-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border: 1px solid rgba(0, 122, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .modal-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .modal-action-btn.secondary {
+            background: rgba(108, 117, 125, 0.1);
+            color: #6c757d;
+            border-color: rgba(108, 117, 125, 0.3);
+        }
+
+        .modal-action-btn.secondary:hover {
+            background: #6c757d;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .place-actions {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .place-action-btn {
+                flex: none;
+            }
+
+            .place-modal {
+                margin: 10px;
+                max-height: calc(100vh - 20px);
+            }
+
+            .place-modal-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .modal-action-btn {
+                flex: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">🧭</div>
+                    <span>RoamWise</span>
+                </div>
+                <div class="header-actions">
+                    <button class="theme-toggle" id="themeToggle">🌓</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="content">
+                <!-- Search View -->
+                <div class="view active" id="searchView">
+                    <div class="mobile-layout" style="display: none;"></div>
+                    <div class="hero">
+                        <h1 class="hero-title">Discover Amazing Places</h1>
+                        <p class="hero-subtitle">AI-powered recommendations tailored just for you</p>
+                    </div>
+                    
+                    <!-- Always Visible Weather Card -->
+                    <div class="weather-section">
+                        <div class="weather-card" id="weatherCard">
+                            <div class="weather-header">
+                                <h3 class="weather-title">🌤️ Current Weather</h3>
+                                <button class="weather-refresh" id="weatherRefresh">🔄</button>
+                            </div>
+                            <div class="weather-body" id="weatherBody">
+                                <div class="weather-loading">
+                                    <div class="spinner"></div>
+                                    <span>Getting weather data...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="search-section">
+                        <div class="search-card">
+                            <div class="search-header">
+                                <h2 class="search-title">🔍 Smart Search</h2>
+                                <p class="search-subtitle">Powered by o3-mini AI</p>
+                            </div>
+                            <div class="search-body">
+                                <div class="search-form">
+                                    <input 
+                                        type="text" 
+                                        class="search-input" 
+                                        id="searchInput"
+                                        data-testid="search-input"
+                                        placeholder="What kind of experience are you looking for?"
+                                        aria-label="Search for places and experiences"
+                                        aria-describedby="search-help-text"
+                                        tabindex="1"
+                                    >
+                                    <button class="search-btn" id="searchBtn" data-testid="search-button" aria-label="Execute search" disabled>
+                                        <span id="searchBtnText">Search</span>
+                                    </button>
+                                    <button class="voice-btn" id="voiceBtn" data-testid="voice-button" aria-label="Voice search" style="display: none;">
+                                        🎤
+                                    </button>
+                                    <button class="clear-btn" id="clearBtn" data-testid="clear-button" aria-label="Clear search" style="display: none;">
+                                        ✕
+                                    </button>
+                                </div>
+                                <div id="search-help-text" class="sr-only">Enter your search query and press enter or click search</div>
+                                
+                                <div class="search-options">
+                                    <div class="search-filters">
+                                        <label class="filter-toggle">
+                                            <input type="checkbox" id="openNowFilter" data-testid="filter-open-now" tabindex="2">
+                                            <span>🕐 Open now</span>
+                                        </label>
+                                        <label class="filter-toggle">
+                                            <input type="checkbox" id="highRatedFilter" data-testid="filter-high-rated" tabindex="3">
+                                            <span>⭐ High rated (4.0+)</span>
+                                        </label>
+                                        <div class="radius-selector">
+                                            <label>📍 Radius:</label>
+                                            <select id="radiusSelect" data-testid="radius-select">
+                                                <option value="1000">1 km</option>
+                                                <option value="2000" selected>2 km</option>
+                                                <option value="5000">5 km</option>
+                                                <option value="10000">10 km</option>
+                                            </select>
+                                        </div>
+                                        <div class="rain-plan-control">
+                                            <label class="filter-toggle">
+                                                <input type="checkbox" id="rainPlanToggle" data-testid="rain-plan-toggle">
+                                                <span>☔ Rain Plan</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="quick-filters">
+                                    <h4 class="filter-section-title">🍕 Food & Drinks</h4>
+                                    <div class="filter-grid">
+                                        <div class="filter-btn" data-category="restaurant" data-type="restaurant" data-testid="quick-tag-restaurants">🍽️ Restaurants</div>
+                                        <div class="filter-btn" data-category="pizza" data-type="meal_takeaway" data-testid="quick-tag-pizza">🍕 Pizza</div>
+                                        <div class="filter-btn" data-category="ice_cream" data-type="restaurant">🍦 Ice Cream</div>
+                                        <div class="filter-btn" data-category="cafe" data-type="cafe">☕ Cafes</div>
+                                    </div>
+                                    
+                                    <h4 class="filter-section-title">🏛️ Attractions & Views</h4>
+                                    <div class="filter-grid">
+                                        <div class="filter-btn" data-category="tourist_attraction" data-type="tourist_attraction" data-testid="quick-tag-attractions">🏛️ Attractions</div>
+                                        <div class="filter-btn" data-category="viewpoint" data-type="tourist_attraction">🌄 Viewpoints</div>
+                                        <div class="filter-btn" data-category="museum" data-type="museum" data-testid="quick-tag-museums">🏛️ Museums</div>
+                                        <div class="filter-btn" data-category="park" data-type="park">🌳 Parks</div>
+                                    </div>
+                                    
+                                    <h4 class="filter-section-title">🚴 Activities</h4>
+                                    <div class="filter-grid">
+                                        <div class="filter-btn" data-category="hiking" data-type="tourist_attraction">🥾 Hiking</div>
+                                        <div class="filter-btn" data-category="biking" data-type="bicycle_store">🚴 Biking</div>
+                                        <div class="filter-btn" data-category="entertainment" data-type="amusement_park">🎯 Entertainment</div>
+                                        <div class="filter-btn" data-category="shopping" data-type="shopping_mall">🛍️ Shopping</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="results" id="searchResults" data-testid="results-container" role="region" aria-label="Search results">
+                        <div class="loading-indicator" id="loadingIndicator" data-testid="loading-indicator" style="display: none;">
+                            <div class="spinner"></div>
+                            <span>Searching...</span>
+                        </div>
+                        <div class="error-message" id="errorMessage" data-testid="error-message" style="display: none;">
+                            <h3>Search Error</h3>
+                            <p id="errorText"></p>
+                            <button id="retryButton" data-testid="retry-button">Try Again</button>
+                        </div>
+                        <div class="empty-state" id="emptyState" data-testid="empty-state" style="display: none;">
+                            <h3>No results found</h3>
+                            <p>Try searching for something else</p>
+                            <div data-testid="search-suggestions">
+                                <h4>Suggestions:</h4>
+                                <span class="suggestion-tag">restaurants</span>
+                                <span class="suggestion-tag">museums</span>
+                                <span class="suggestion-tag">parks</span>
+                            </div>
+                        </div>
+                        <div class="offline-message" id="offlineMessage" data-testid="offline-message" style="display: none;">
+                            <h3>You're offline</h3>
+                            <p>Check your internet connection</p>
+                            <button data-testid="use-cached-results">Use Cached Results</button>
+                        </div>
+                        <div class="result-item">
+                            <div class="result-header">
+                                <h3 class="result-title">🤖 AI Ready</h3>
+                                <span class="result-badge">o3-mini</span>
+                            </div>
+                            <p class="result-description">
+                                Your personal AI travel assistant is ready to help you discover amazing places. 
+                                Try searching for restaurants, attractions, or any travel experience!
+                            </p>
+                            <div class="result-meta">
+                                <span>🧠 Powered by advanced AI</span>
+                                <span>⚡ Real-time recommendations</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Search Results Map -->
+                    <div class="results-map-container" id="resultsMapContainer" style="display: none;">
+                        <div class="map-header">
+                            <h3>📍 Results Map</h3>
+                            <button class="map-toggle" id="mapToggle" data-testid="map-toggle">Hide Map</button>
+                        </div>
+                        <div id="resultsMap" class="results-map" style="height: 400px; width: 100%;"></div>
+                    </div>
+                    
+                    <!-- Compare Tray -->
+                    <div class="compare-tray" id="compareTray" data-testid="compare-tray" style="display: none;">
+                        <h3>Compare Places</h3>
+                        <div class="compare-items" id="compareItems"></div>
+                    </div>
+                    
+                    <!-- Place Modal -->
+                    <div class="modal" id="placeModal" data-testid="place-modal" style="display: none;">
+                        <div class="modal-content">
+                            <span class="close" id="closeModal">&times;</span>
+                            <div id="modalContent"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notification -->
+                    <div class="notification" id="notification" data-testid="notification" style="display: none;"></div>
+                </div>
+
+                <!-- AI Assistant View -->
+                <div class="view" id="aiView">
+                    <div class="ai-container">
+                        <!-- AI Chat Header -->
+                        <div class="ai-header">
+                            <div class="ai-title-section">
+                                <h1 class="ai-main-title">🧠 AI Travel Assistant</h1>
+                                <p class="ai-subtitle">Ask me anything in Hebrew or English • Powered by o3-mini</p>
+                            </div>
+                            <div class="ai-controls">
+                                <button class="ai-control-btn" id="clearChatBtn" title="Clear conversation">
+                                    🗑️ Clear
+                                </button>
+                                <button class="ai-control-btn" id="translateBtn" title="Switch language">
+                                    🌐 עברית/EN
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Conversation Area -->
+                        <div class="conversation-container">
+                            <div class="conversation-messages" id="conversationMessages">
+                                <div class="ai-message welcome-message">
+                                    <div class="message-avatar">🧠</div>
+                                    <div class="message-content">
+                                        <div class="message-text">
+                                            <p><strong>שלום! Hi there!</strong> I'm your intelligent travel assistant. I can help you:</p>
+                                            <ul>
+                                                <li>🔍 Find the best places near you</li>
+                                                <li>🗺️ Plan routes and compare travel options</li>
+                                                <li>📅 Create multi-day itineraries</li>
+                                                <li>🌤️ Check weather and give recommendations</li>
+                                                <li>💡 Answer travel questions in context</li>
+                                            </ul>
+                                            <p>Try asking: <em>"Find me the best pizza open now near Bardolino"</em> or <em>"Plan me a 3-day trip with kids around Lake Garda"</em></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Suggestions -->
+                            <div class="quick-suggestions" id="quickSuggestions">
+                                <div class="suggestion-chip" data-suggestion="Find me gelato shops open now near my location">
+                                    🍦 Find gelato nearby
+                                </div>
+                                <div class="suggestion-chip" data-suggestion="Should I go to Venice today or tomorrow based on weather?">
+                                    🌤️ Weather advice
+                                </div>
+                                <div class="suggestion-chip" data-suggestion="Plan me a 2-day trip by car from Lake Garda">
+                                    📅 Plan a trip
+                                </div>
+                                <div class="suggestion-chip" data-suggestion="Find the fastest route to Dolomites by car">
+                                    🗺️ Get directions
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="input-container">
+                            <div class="input-wrapper">
+                                <textarea 
+                                    class="ai-input" 
+                                    id="aiInput" 
+                                    placeholder="Ask me anything about travel... (Hebrew/English)"
+                                    rows="1"
+                                ></textarea>
+                                <div class="input-actions">
+                                    <button class="input-btn voice-btn" id="voiceInputBtn" title="Voice input">
+                                        🎤
+                                    </button>
+                                    <button class="input-btn send-btn" id="sendBtn" title="Send message">
+                                        ✈️
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="input-status" id="inputStatus">
+                                <span class="typing-indicator" style="display: none;">
+                                    <span class="typing-dot"></span>
+                                    <span class="typing-dot"></span>
+                                    <span class="typing-dot"></span>
+                                    AI is thinking...
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trip Planning View -->
+                <!-- Trip Planning View -->
+                <div class="view" id="tripView">
+                    <div class="hero">
+                        <h1 class="hero-title">World-Class Trip Planner</h1>
+                        <p class="hero-subtitle">Weather-aware, route-optimized itineraries powered by AI</p>
+                    </div>
+                    
+                    <!-- Planning Configuration -->
+                    <div class="planning-config" id="planningConfig">
+                        <div class="config-card">
+                            <div class="config-header">
+                                <h2 class="config-title">🗓️ Trip Configuration</h2>
+                                <p class="config-subtitle">Tell us about your perfect trip</p>
+                            </div>
+                            <div class="config-body">
+                                <!-- Duration & Mode Row -->
+                                <div class="config-row">
+                                    <div class="config-group">
+                                        <label class="config-label">Trip Duration</label>
+                                        <div class="duration-grid">
+                                            <div class="duration-btn" data-duration="0.5">Half Day</div>
+                                            <div class="duration-btn" data-duration="1">1 Day</div>
+                                            <div class="duration-btn" data-duration="2">2 Days</div>
+                                            <div class="duration-btn" data-duration="3">3 Days</div>
+                                            <div class="duration-btn" data-duration="4">4 Days</div>
+                                            <div class="duration-btn" data-duration="5">5 Days</div>
+                                            <div class="duration-btn" data-duration="6">6 Days</div>
+                                            <div class="duration-btn" data-duration="7">1 Week</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="config-group">
+                                        <label class="config-label">Travel Mode *</label>
+                                        <div class="mode-selector">
+                                            <div class="mode-option" data-mode="car">
+                                                <div class="mode-icon">🚗</div>
+                                                <div class="mode-info">
+                                                    <div class="mode-title">Car</div>
+                                                    <div class="mode-desc">Scenic drives, larger radius</div>
+                                                </div>
+                                            </div>
+                                            <div class="mode-option" data-mode="transit">
+                                                <div class="mode-icon">🚆</div>
+                                                <div class="mode-info">
+                                                    <div class="mode-title">Public Transit</div>
+                                                    <div class="mode-desc">City centers, stations</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Party & Preferences Row -->
+                                <div class="config-row">
+                                    <div class="config-group">
+                                        <label class="config-label">Party Size</label>
+                                        <div class="party-inputs">
+                                            <div class="party-field">
+                                                <label>Adults</label>
+                                                <select id="adultsCount">
+                                                    <option value="1">1</option>
+                                                    <option value="2" selected>2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5+</option>
+                                                </select>
+                                            </div>
+                                            <div class="party-field">
+                                                <label>Kids</label>
+                                                <select id="kidsCount">
+                                                    <option value="0" selected>0</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4+</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="config-group">
+                                        <label class="config-label">Travel Pace</label>
+                                        <div class="pace-selector">
+                                            <div class="pace-option" data-pace="relaxed">
+                                                <span class="pace-icon">😌</span>
+                                                <span>Relaxed</span>
+                                            </div>
+                                            <div class="pace-option selected" data-pace="balanced">
+                                                <span class="pace-icon">⚖️</span>
+                                                <span>Balanced</span>
+                                            </div>
+                                            <div class="pace-option" data-pace="packed">
+                                                <span class="pace-icon">⚡</span>
+                                                <span>Packed</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Interests Selection -->
+                                <div class="config-group">
+                                    <label class="config-label">Interests (Select all that apply)</label>
+                                    <div class="interests-grid">
+                                        <div class="interest-chip" data-interest="nature">🌿 Nature</div>
+                                        <div class="interest-chip" data-interest="viewpoints">🌄 Viewpoints</div>
+                                        <div class="interest-chip" data-interest="hiking">🥾 Hiking</div>
+                                        <div class="interest-chip" data-interest="food">🍽️ Food</div>
+                                        <div class="interest-chip" data-interest="gelato">🍦 Gelato</div>
+                                        <div class="interest-chip" data-interest="museums">🏛️ Museums</div>
+                                        <div class="interest-chip" data-interest="parks">🌳 Parks</div>
+                                        <div class="interest-chip" data-interest="amusement">🎢 Amusement</div>
+                                        <div class="interest-chip" data-interest="spa">🧘 Spa</div>
+                                        <div class="interest-chip" data-interest="kids">👨‍👩‍👧‍👦 Kids-friendly</div>
+                                        <div class="interest-chip" data-interest="nightlife">🌃 Nightlife</div>
+                                        <div class="interest-chip" data-interest="shopping">🛍️ Shopping</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Advanced Options -->
+                                <div class="config-group">
+                                    <label class="config-label">Additional Preferences</label>
+                                    <div class="preferences-grid">
+                                        <div class="pref-section">
+                                            <label>Dietary</label>
+                                            <select id="dietaryFilter">
+                                                <option value="none">No restrictions</option>
+                                                <option value="vegetarian">Vegetarian</option>
+                                                <option value="vegan">Vegan</option>
+                                                <option value="kosher">Kosher</option>
+                                                <option value="halal">Halal</option>
+                                            </select>
+                                        </div>
+                                        <div class="pref-section">
+                                            <label>Budget Level</label>
+                                            <select id="budgetLevel">
+                                                <option value="low">Low ($)</option>
+                                                <option value="medium" selected>Medium ($$)</option>
+                                                <option value="high">High ($$$)</option>
+                                            </select>
+                                        </div>
+                                        <div class="pref-section">
+                                            <label>Max Walking</label>
+                                            <select id="walkingTolerance">
+                                                <option value="1000">≤ 1km</option>
+                                                <option value="2000" selected>≤ 2km</option>
+                                                <option value="5000">≤ 5km</option>
+                                                <option value="unlimited">Unlimited</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Base Location -->
+                                <div class="config-group">
+                                    <label class="config-label">Starting Location</label>
+                                    <div class="location-input">
+                                        <input 
+                                            type="text" 
+                                            id="baseLocationInput" 
+                                            placeholder="Your hotel, city, or current location"
+                                            class="location-field"
+                                        >
+                                        <button type="button" id="useCurrentLocationBtn" class="location-btn">
+                                            📍 Use Current Location
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Generate Button -->
+                                <div class="config-actions">
+                                    <button class="btn btn-primary btn-xl" id="generatePlanBtn" disabled>
+                                        <span class="btn-icon">🧠</span>
+                                        <span class="btn-text">Generate Smart Plan</span>
+                                    </button>
+                                    <div class="generation-status" id="generationStatus" style="display: none;">
+                                        <div class="status-spinner"></div>
+                                        <span class="status-text">Crafting your perfect itinerary...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Itinerary Display -->
+                    <div class="itinerary-container" id="itineraryContainer" style="display: none;">
+                        <div class="itinerary-header">
+                            <div class="itinerary-title">
+                                <h2>Your Smart Itinerary</h2>
+                                <div class="itinerary-meta">
+                                    <span id="itineraryDuration"></span> • 
+                                    <span id="itineraryMode"></span> • 
+                                    <span id="itineraryWeather"></span>
+                                </div>
+                            </div>
+                            <div class="itinerary-actions">
+                                <button class="btn btn-secondary" id="editPlanBtn">✏️ Edit</button>
+                                <button class="btn btn-secondary" id="savePlanBtn">💾 Save</button>
+                                <button class="btn btn-secondary" id="sharePlanBtn">📤 Share</button>
+                            </div>
+                        </div>
+                        
+                        <!-- Day Tabs -->
+                        <div class="day-tabs" id="dayTabs">
+                            <!-- Day tabs will be generated here -->
+                        </div>
+                        
+                        <!-- Timeline and Map Container -->
+                        <div class="itinerary-content">
+                            <div class="timeline-container">
+                                <div id="dayTimeline" class="day-timeline">
+                                    <!-- Timeline slots will be generated here -->
+                                </div>
+                            </div>
+                            <div class="map-container">
+                                <div id="itineraryMap" class="itinerary-map">
+                                    <!-- Map will be rendered here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile View -->
+                <div class="view" id="profileView">
+                    <div class="hero">
+                        <h1 class="hero-title">Your Travel Profile</h1>
+                        <p class="hero-subtitle">Personalized settings and travel history</p>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">📊 Travel Stats</h3>
+                            <p class="card-subtitle">Your journey with RoamWise</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="option-grid">
+                                <div style="text-align: center; padding: 1rem;">
+                                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">0</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray-600);">Trips Planned</div>
+                                </div>
+                                <div style="text-align: center; padding: 1rem;">
+                                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">0</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray-600);">Places Visited</div>
+                                </div>
+                                <div style="text-align: center; padding: 1rem;">
+                                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">100%</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray-600);">AI Accuracy</div>
+                                </div>
+                                <div style="text-align: center; padding: 1rem;">
+                                    <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">∞</div>
+                                    <div style="font-size: 0.875rem; color: var(--gray-600);">Possibilities</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <div class="nav-content">
+                <a href="#" class="nav-item active" data-view="search">
+                    <span class="nav-icon">🔍</span>
+                    <span class="nav-label">Search</span>
+                </a>
+                <a href="#" class="nav-item" data-view="ai">
+                    <span class="nav-icon">🤖</span>
+                    <span class="nav-label">AI Assistant</span>
+                </a>
+                <a href="#" class="nav-item" data-view="trip">
+                    <span class="nav-icon">🗺️</span>
+                    <span class="nav-label">Trip Plan</span>
+                </a>
+                <a href="#" class="nav-item" data-view="profile">
+                    <span class="nav-icon">👤</span>
+                    <span class="nav-label">Profile</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=[REDACTED_GMAPS_KEY]&libraries=places&callback=initMap"></script>
+    <script src="app.js"></script>
 </body>
 </html>

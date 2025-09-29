@@ -1,0 +1,657 @@
+{
+  "info": {
+    "name": "RoamWise Search Page API Tests",
+    "description": "Comprehensive API testing for search page functionality",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081",
+      "type": "string"
+    },
+    {
+      "key": "aiEndpoint",
+      "value": "{{baseUrl}}/api",
+      "type": "string"
+    },
+    {
+      "key": "testLocation",
+      "value": "{\"lat\": 32.0853, \"lng\": 34.7818}",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "AI Orchestrator Tests",
+      "item": [
+        {
+          "name": "Standard Search - Happy Path",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Response time is reasonable', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+                  "});",
+                  "",
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has valid structure', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData).to.have.property('data');",
+                  "    pm.expect(jsonData).to.have.property('requestId');",
+                  "});",
+                  "",
+                  "pm.test('Search results contain required fields', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.success && jsonData.data.uiPayload && jsonData.data.uiPayload.items) {",
+                  "        const items = jsonData.data.uiPayload.items;",
+                  "        if (items.length > 0) {",
+                  "            const item = items[0];",
+                  "            pm.expect(item).to.have.property('place_id');",
+                  "            pm.expect(item).to.have.property('name');",
+                  "            pm.expect(item).to.have.property('rating');",
+                  "        }",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('AI explanation provided', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.success) {",
+                  "        pm.expect(jsonData.data).to.have.property('explanation');",
+                  "        pm.expect(jsonData.data.explanation).to.be.a('string');",
+                  "        pm.expect(jsonData.data.explanation.length).to.be.above(0);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a travel planning orchestrator. Analyze the user's request and output ONLY a strict JSON plan using the provided schema.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"Find me good restaurants in Tel Aviv\"\n    }\n  ],\n  \"temperature\": 0.1,\n  \"max_tokens\": 500\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/o3-mini",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["o3-mini"]
+            }
+          }
+        },
+        {
+          "name": "Two-Pass Planning Detection",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Complex query triggers two-pass planning', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.success && jsonData.metadata) {",
+                  "        pm.expect(jsonData.metadata).to.have.property('planningMethod');",
+                  "        pm.expect(jsonData.metadata.planningMethod).to.equal('two_pass');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('Anchors and fillers identified', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.success && jsonData.metadata && jsonData.metadata.planningMethod === 'two_pass') {",
+                  "        pm.expect(jsonData.metadata).to.have.property('anchors');",
+                  "        pm.expect(jsonData.metadata).to.have.property('fillers');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"Plan a full day exploring Tel Aviv with lunch, museums, and evening entertainment\",\n  \"location\": {{testLocation}},\n  \"context\": {\n    \"planType\": \"full_day\",\n    \"preferences\": {\n      \"interests\": [\"culture\", \"food\", \"entertainment\"]\n    }\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orchestrate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orchestrate"]
+            }
+          }
+        },
+        {
+          "name": "Error Handling - Invalid Input",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Handles invalid input gracefully', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([400, 422]);",
+                  "});",
+                  "",
+                  "pm.test('Error response has proper structure', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('success');",
+                  "    pm.expect(jsonData.success).to.be.false;",
+                  "    pm.expect(jsonData).to.have.property('error');",
+                  "});",
+                  "",
+                  "pm.test('No sensitive information in error', function () {",
+                  "    const responseText = pm.response.text();",
+                  "    pm.expect(responseText).to.not.include('stack');",
+                  "    pm.expect(responseText).to.not.include('internal');",
+                  "    pm.expect(responseText).to.not.include('database');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"invalid\": \"malformed request\",\n  \"query\": null\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/orchestrate",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "orchestrate"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Places API Tests",
+      "item": [
+        {
+          "name": "Search Places - Basic Query",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has places data', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('ok', true);",
+                  "    pm.expect(jsonData).to.have.property('items');",
+                  "    pm.expect(jsonData.items).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test('Places have required fields', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.items && jsonData.items.length > 0) {",
+                  "        const place = jsonData.items[0];",
+                  "        pm.expect(place).to.have.property('place_id');",
+                  "        pm.expect(place).to.have.property('name');",
+                  "        pm.expect(place).to.have.property('geometry');",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('Hybrid scoring applied', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.items && jsonData.items.length > 0) {",
+                  "        const place = jsonData.items[0];",
+                  "        pm.expect(place).to.have.property('aiScore');",
+                  "        pm.expect(place.aiScore).to.be.a('number');",
+                  "        pm.expect(place.aiScore).to.be.within(0, 5);",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"restaurants\",\n  \"lat\": 32.0853,\n  \"lng\": 34.7818,\n  \"radius\": 5000,\n  \"fields\": [\"place_id\", \"name\", \"rating\", \"user_ratings_total\", \"geometry\", \"opening_hours\", \"price_level\"]\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/places",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["places"]
+            }
+          }
+        },
+        {
+          "name": "Search Places - With Filters",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Filtered results match criteria', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.items && jsonData.items.length > 0) {",
+                  "        jsonData.items.forEach(function(place) {",
+                  "            if (place.rating) {",
+                  "                pm.expect(place.rating).to.be.at.least(4.0);",
+                  "            }",
+                  "            if (place.opening_hours) {",
+                  "                pm.expect(place.opening_hours.open_now).to.be.true;",
+                  "            }",
+                  "        });",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"restaurants\",\n  \"lat\": 32.0853,\n  \"lng\": 34.7818,\n  \"radius\": 2000,\n  \"minRating\": 4.0,\n  \"openNow\": true,\n  \"fields\": [\"place_id\", \"name\", \"rating\", \"opening_hours\", \"geometry\"]\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/places",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["places"]
+            }
+          }
+        },
+        {
+          "name": "Place Details",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "// This would typically use a place_id from a previous search",
+                  "pm.globals.set('test_place_id', 'ChIJrTLr-GyqAhUR6CSWZNf9i9s');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Place details retrieved', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('ok', true);",
+                  "    pm.expect(jsonData).to.have.property('result');",
+                  "});",
+                  "",
+                  "pm.test('Detailed information present', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.result) {",
+                  "        pm.expect(jsonData.result).to.have.property('place_id');",
+                  "        // Check for enhanced details",
+                  "        const hasEnhancedData = jsonData.result.opening_hours || ",
+                  "                                 jsonData.result.photos || ",
+                  "                                 jsonData.result.reviews;",
+                  "        pm.expect(hasEnhancedData).to.be.true;",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"placeId\": \"{{test_place_id}}\",\n  \"fields\": [\"opening_hours\", \"formatted_phone_number\", \"website\", \"photos\", \"reviews\"]\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/place-details",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["place-details"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Weather API Tests",
+      "item": [
+        {
+          "name": "Current Weather",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Weather data retrieved', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('ok', true);",
+                  "    pm.expect(jsonData).to.have.property('current');",
+                  "});",
+                  "",
+                  "pm.test('Weather has precipitation data', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.current) {",
+                  "        pm.expect(jsonData.current).to.have.property('precipitation_probability');",
+                  "        pm.expect(jsonData.current.precipitation_probability).to.be.a('number');",
+                  "        pm.expect(jsonData.current.precipitation_probability).to.be.within(0, 100);",
+                  "    }",
+                  "});",
+                  "",
+                  "pm.test('Temperature data present', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.current) {",
+                  "        pm.expect(jsonData.current).to.have.property('temperature');",
+                  "        pm.expect(jsonData.current.temperature).to.be.a('number');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"lat\": 32.0853,\n  \"lng\": 34.7818,\n  \"timeframe\": \"current\"\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/weather",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["weather"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Route API Tests",
+      "item": [
+        {
+          "name": "Basic Route Calculation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Route calculated successfully', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('ok', true);",
+                  "    pm.expect(jsonData).to.have.property('routes');",
+                  "});",
+                  "",
+                  "pm.test('Route has polyline', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.routes && jsonData.routes.length > 0) {",
+                  "        const route = jsonData.routes[0];",
+                  "        pm.expect(route).to.have.property('overview_polyline');",
+                  "        pm.expect(route.overview_polyline).to.have.property('points');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"origin\": \"32.0853,34.7818\",\n  \"destination\": \"32.1063,34.8058\",\n  \"mode\": \"driving\",\n  \"departure_time\": \"now\"\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/route",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["route"]
+            }
+          }
+        },
+        {
+          "name": "Search Along Route",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Route corridor search works', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('ok', true);",
+                  "    pm.expect(jsonData).to.have.property('items');",
+                  "});",
+                  "",
+                  "pm.test('Results have detour information', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    if (jsonData.items && jsonData.items.length > 0) {",
+                  "        const item = jsonData.items[0];",
+                  "        pm.expect(item).to.have.property('detourInfo');",
+                  "        pm.expect(item.detourInfo).to.have.property('additionalMinutes');",
+                  "    }",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"polyline\": \"sample_polyline_encoded_string\",\n  \"query\": \"restaurants\",\n  \"bufferKm\": 2,\n  \"maxResults\": 8\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/search-along-route",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["search-along-route"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Performance Tests",
+      "item": [
+        {
+          "name": "Search Response Time",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Search completes within 5 seconds', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(5000);",
+                  "});",
+                  "",
+                  "pm.test('Response size is reasonable', function () {",
+                  "    const responseSize = pm.response.responseSize;",
+                  "    pm.expect(responseSize).to.be.below(1024 * 1024); // 1MB limit",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"restaurants in Tel Aviv\",\n  \"lat\": 32.0853,\n  \"lng\": 34.7818,\n  \"radius\": 5000\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/places",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["places"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Security Tests",
+      "item": [
+        {
+          "name": "SQL Injection Protection",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('SQL injection attempt blocked', function () {",
+                  "    // Should either return error or safely handle",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400, 422]);",
+                  "    ",
+                  "    // Should not contain SQL error messages",
+                  "    const responseText = pm.response.text();",
+                  "    pm.expect(responseText).to.not.include('SQL');",
+                  "    pm.expect(responseText).to.not.include('syntax error');",
+                  "    pm.expect(responseText).to.not.include('mysql');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"'; DROP TABLE places; --\",\n  \"lat\": 32.0853,\n  \"lng\": 34.7818\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/places",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["places"]
+            }
+          }
+        },
+        {
+          "name": "XSS Protection",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('XSS attempt sanitized', function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    const responseText = JSON.stringify(jsonData);",
+                  "    ",
+                  "    // Should not contain script tags",
+                  "    pm.expect(responseText).to.not.include('<script>');",
+                  "    pm.expect(responseText).to.not.include('javascript:');",
+                  "    pm.expect(responseText).to.not.include('onerror=');",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<script>alert('xss')</script>restaurants\",\n  \"lat\": 32.0853,\n  \"lng\": 34.7818\n}"
+            },
+            "url": {
+              "raw": "{{aiEndpoint}}/places",
+              "host": ["{{aiEndpoint}}"],
+              "path": ["places"]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "// Set timestamp for unique request tracking",
+          "pm.globals.set('timestamp', Date.now());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "exec": [
+          "// Global response validation",
+          "pm.test('Response has valid JSON', function () {",
+          "    pm.response.to.be.json;",
+          "});",
+          "",
+          "pm.test('Response headers include content-type', function () {",
+          "    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');",
+          "});"
+        ]
+      }
+    }
+  ]
+}

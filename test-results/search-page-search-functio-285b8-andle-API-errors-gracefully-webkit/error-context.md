@@ -1,0 +1,95 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - generic [ref=e6]: 🧭
+          - generic [ref=e7]: RoamWise
+        - button "🌓" [ref=e9] [cursor=pointer]
+    - main [ref=e10]:
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - heading "Discover Amazing Places" [level=1] [ref=e14]
+          - paragraph [ref=e15]: AI-powered recommendations tailored just for you
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - heading "🌤️ Current Weather" [level=3] [ref=e19]
+            - button "🔄" [ref=e20] [cursor=pointer]
+          - generic [ref=e22]:
+            - generic [ref=e23]: 🌤️
+            - generic [ref=e24]: Unable to get weather data
+            - generic [ref=e25]: Location access denied
+            - button "Try Again" [ref=e26] [cursor=pointer]
+        - generic [ref=e28]:
+          - generic [ref=e29]:
+            - heading "🔍 Smart Search" [level=2] [ref=e30]
+            - paragraph [ref=e31]: Powered by o3-mini AI
+          - generic [ref=e32]:
+            - generic [ref=e33]:
+              - textbox "Search for places and experiences" [ref=e34]: restaurants
+              - button "Execute search" [disabled] [ref=e35]:
+                - generic [ref=e36]: Understanding...
+              - button "Voice search" [ref=e38] [cursor=pointer]: 🎤
+              - button "Clear search" [ref=e39] [cursor=pointer]: ✕
+            - generic [ref=e40]: Enter your search query and press enter or click search
+            - generic [ref=e42]:
+              - generic [ref=e43] [cursor=pointer]:
+                - checkbox "🕐 Open now" [ref=e44]
+                - generic [ref=e45] [cursor=pointer]: 🕐 Open now
+              - generic [ref=e46] [cursor=pointer]:
+                - checkbox "⭐ High rated (4.0+)" [ref=e47]
+                - generic [ref=e48] [cursor=pointer]: ⭐ High rated (4.0+)
+              - generic [ref=e49]:
+                - generic [ref=e50]: "📍 Radius:"
+                - combobox [ref=e51]:
+                  - option "1 km"
+                  - option "2 km" [selected]
+                  - option "5 km"
+                  - option "10 km"
+              - generic [ref=e53] [cursor=pointer]:
+                - checkbox "☔ Rain Plan" [ref=e54]
+                - generic [ref=e55] [cursor=pointer]: ☔ Rain Plan
+            - generic [ref=e56]:
+              - heading "🍕 Food & Drinks" [level=4] [ref=e57]
+              - generic [ref=e58]:
+                - generic [ref=e59] [cursor=pointer]: 🍽️ Restaurants
+                - generic [ref=e60] [cursor=pointer]: 🍕 Pizza
+                - generic [ref=e61] [cursor=pointer]: 🍦 Ice Cream
+                - generic [ref=e62] [cursor=pointer]: ☕ Cafes
+              - heading "🏛️ Attractions & Views" [level=4] [ref=e63]
+              - generic [ref=e64]:
+                - generic [ref=e65] [cursor=pointer]: 🏛️ Attractions
+                - generic [ref=e66] [cursor=pointer]: 🌄 Viewpoints
+                - generic [ref=e67] [cursor=pointer]: 🏛️ Museums
+                - generic [ref=e68] [cursor=pointer]: 🌳 Parks
+              - heading "🚴 Activities" [level=4] [ref=e69]
+              - generic [ref=e70]:
+                - generic [ref=e71] [cursor=pointer]: 🥾 Hiking
+                - generic [ref=e72] [cursor=pointer]: 🚴 Biking
+                - generic [ref=e73] [cursor=pointer]: 🎯 Entertainment
+                - generic [ref=e74] [cursor=pointer]: 🛍️ Shopping
+        - region "Search results"
+    - navigation [ref=e75]:
+      - generic [ref=e76]:
+        - link "🔍 Search" [ref=e77] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e78] [cursor=pointer]: 🔍
+          - generic [ref=e79] [cursor=pointer]: Search
+        - link "🤖 AI Assistant" [ref=e80] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e81] [cursor=pointer]: 🤖
+          - generic [ref=e82] [cursor=pointer]: AI Assistant
+        - link "🗺️ Trip Plan" [ref=e83] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e84] [cursor=pointer]: 🗺️
+          - generic [ref=e85] [cursor=pointer]: Trip Plan
+        - link "👤 Profile" [ref=e86] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e87] [cursor=pointer]: 👤
+          - generic [ref=e88] [cursor=pointer]: Profile
+  - generic [ref=e89]: 📍 Requesting your location for personalized results...
+  - generic [ref=e90]: Location access denied. Please allow location access for personalized travel recommendations.
+```
