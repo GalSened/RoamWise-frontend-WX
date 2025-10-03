@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { waitForPlannerOK } from './utils/waits';
 
 test.describe('Traveling App', () => {
   test.beforeEach(async ({ page }) => {
@@ -76,9 +77,11 @@ test.describe('Traveling App', () => {
     
     // Should show loading state
     await expect(page.locator('#generateTripBtn')).toContainText('Generating');
-    
+
+    // Wait for planner API to respond
+    await waitForPlannerOK(page);
+
     // Trip should be generated
-    await page.waitForTimeout(2000);
     await expect(page.locator('#enhancedTripDisplay')).not.toHaveAttribute('hidden');
   });
 
