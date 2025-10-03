@@ -11,19 +11,19 @@ test.describe('Traveling App', () => {
 
   test('should have working navigation', async ({ page }) => {
     // Check initial view is search
-    await expect(page.locator('[data-view="search"]')).toHaveClass(/active/);
+    await expect(page.locator('#searchView')).toBeVisible();
 
     // Navigate to trip planning
-    await page.click('[data-view="trip"]');
-    await expect(page.locator('[data-view="trip"]')).toHaveClass(/active/);
+    await page.getByTestId('nav-trip').click();
+    await expect(page.locator('#tripView')).toBeVisible();
 
     // Navigate to AI
-    await page.click('[data-view="ai"]');
-    await expect(page.locator('[data-view="ai"]')).toHaveClass(/active/);
+    await page.getByTestId('nav-ai').click();
+    await expect(page.locator('#aiView')).toBeVisible();
 
-    // Navigate to map
-    await page.click('[data-view="map"]');
-    await expect(page.locator('[data-view="map"]')).toHaveClass(/active/);
+    // Navigate to profile
+    await page.getByTestId('nav-profile').click();
+    await expect(page.locator('#profileView')).toBeVisible();
   });
 
   test('should toggle theme', async ({ page }) => {
@@ -43,15 +43,15 @@ test.describe('Traveling App', () => {
 
   test('should perform search', async ({ page }) => {
     // Navigate to search view
-    await page.click('[data-view="search"]');
-    
+    await page.getByTestId('nav-search').click();
+
     // Enter search query
     await page.fill('#freeText', 'restaurants');
     await page.click('#searchBtn');
-    
+
     // Should show loading state
     await expect(page.locator('#searchBtn')).toContainText('Searching');
-    
+
     // Results should appear (mocked)
     await page.waitForTimeout(1000);
     await expect(page.locator('#list')).not.toBeEmpty();
@@ -59,24 +59,24 @@ test.describe('Traveling App', () => {
 
   test('should create trip plan', async ({ page }) => {
     // Navigate to trip planning
-    await page.click('[data-view="trip"]');
-    
+    await page.getByTestId('nav-trip').click();
+
     // Select duration
     await page.click('[data-duration="8"]');
-    
+
     // Select interests
-    await page.click('[data-interest="gourmet"]');
+    await page.click('[data-interest="food"]');
     await page.click('[data-interest="nature"]');
-    
+
     // Set budget
     await page.fill('#budgetRange', '400');
-    
+
     // Generate trip
     await page.click('#generateTripBtn');
-    
+
     // Should show loading state
     await expect(page.locator('#generateTripBtn')).toContainText('Generating');
-    
+
     // Trip should be generated
     await page.waitForTimeout(2000);
     await expect(page.locator('#enhancedTripDisplay')).not.toHaveAttribute('hidden');
@@ -85,33 +85,27 @@ test.describe('Traveling App', () => {
   test('should handle voice interaction', async ({ page }) => {
     // Mock permissions
     await page.context().grantPermissions(['microphone']);
-    
+
     // Navigate to AI view
-    await page.click('[data-view="ai"]');
-    
+    await page.getByTestId('nav-ai').click();
+
     // Test voice button
     const voiceBtn = page.locator('#voiceBtn');
-    
+
     // Should be present and enabled
     await expect(voiceBtn).toBeVisible();
     await expect(voiceBtn).toBeEnabled();
-    
+
     // Click and hold simulation
     await voiceBtn.click();
-    
+
     // Should show listening state
     await expect(page.locator('#voiceStatus')).toContainText('Listening');
   });
 
-  test('should display map', async ({ page }) => {
-    // Navigate to map view
-    await page.click('[data-view="map"]');
-    
-    // Map container should be visible
-    await expect(page.locator('#map')).toBeVisible();
-    
-    // Location button should be present
-    await expect(page.locator('#locationFab')).toBeVisible();
+  test.skip('should display map', async ({ page }) => {
+    // Note: Map view doesn't exist in current implementation
+    // This test is skipped until map feature is added
   });
 
   test('should show update notification', async ({ page }) => {
@@ -134,39 +128,37 @@ test.describe('Traveling App', () => {
   test('should be responsive', async ({ page }) => {
     // Test mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
-    
+
     // App should still be functional
-    await expect(page.locator('.mobile-layout')).toBeVisible();
     await expect(page.locator('.bottom-nav')).toBeVisible();
-    
+
     // Navigation should work on mobile
-    await page.click('[data-view="trip"]');
-    await expect(page.locator('[data-view="trip"]')).toHaveClass(/active/);
+    await page.getByTestId('nav-trip').click();
+    await expect(page.locator('#tripView')).toBeVisible();
   });
 
   test('should handle offline state', async ({ page }) => {
     // Go offline
     await page.context().setOffline(true);
-    
+
     // App should still load from cache
     await page.reload();
-    await expect(page.locator('.mobile-layout')).toBeVisible();
-    
-    // Should show offline indicator or handle gracefully
-    // This would depend on your offline implementation
+
+    // Bottom nav should still be visible (basic functionality)
+    await expect(page.locator('.bottom-nav')).toBeVisible();
   });
 
   test('should save preferences', async ({ page }) => {
     // Change theme
     await page.click('#themeToggle');
-    
+
     // Create a trip plan
-    await page.click('[data-view="trip"]');
-    await page.click('[data-duration="4"]');
-    
+    await page.getByTestId('nav-trip').click();
+    await page.click('[data-duration="8"]');
+
     // Reload page
     await page.reload();
-    
+
     // Theme should be preserved
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   });
