@@ -620,7 +620,7 @@
     </header>
 
     <!-- Main Content -->
-    <main class="app-main">
+    <main id="appMain" class="app-main">
       <!-- Search View -->
       <section id="searchView" class="app-view active" data-view="search">
         <div class="view-header">
@@ -815,19 +815,19 @@
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-      <button class="nav-btn active" data-view="search">
+      <button class="nav-btn active" data-view="search" data-testid="nav-search">
         <span class="nav-icon">🔍</span>
         <span class="nav-label">Search</span>
       </button>
-      <button class="nav-btn" data-view="ai">
+      <button class="nav-btn" data-view="ai" data-testid="nav-ai">
         <span class="nav-icon">🤖</span>
         <span class="nav-label">AI</span>
       </button>
-      <button class="nav-btn" data-view="trip">
+      <button class="nav-btn" data-view="trip" data-testid="nav-trip">
         <span class="nav-icon">🗺️</span>
         <span class="nav-label">Trip</span>
       </button>
-      <button class="nav-btn" data-view="profile">
+      <button class="nav-btn" data-view="profile" data-testid="nav-profile">
         <span class="nav-icon">👤</span>
         <span class="nav-label">Profile</span>
       </button>

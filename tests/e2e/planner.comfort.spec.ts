@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Planner Comfort UI (Step 8A-UI)', () => {
   test('NEARBY mode – shows comfort section on each POI', async ({ page }) => {
     await page.goto('/');
-    await page.click('[data-view="planner"]');
+    await page.getByTestId('nav-trip').click();
 
     // Choose "My location" start
     await page.click('#btnStartCurrent');
@@ -34,7 +34,7 @@ test.describe('Planner Comfort UI (Step 8A-UI)', () => {
 
   test('A→B mode – shows comfort section on each POI', async ({ page }) => {
     await page.goto('/');
-    await page.click('[data-view="planner"]');
+    await page.getByTestId('nav-trip').click();
 
     // Choose hotel mode
     await page.click('#btnStartHotel');
