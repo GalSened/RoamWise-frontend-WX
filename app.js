@@ -6,7 +6,7 @@ let map = L.map('map', { zoomControl:true }).setView([45.8144, 10.8400], 12);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
   maxZoom: 19, attribution: '\u00A9 OpenStreetMap'
 }).addTo(map);
-let hereMarker, resultsLayer = L.layerGroup().addTo(map), routeLayer = L.layerGroup().addTo(map);
+let hereMarker, resultsLayer = L.layerGroup().addTo(map), routeLayer = L.layerGroup().addTo(map), hazardsLayer = L.layerGroup().addTo(map);
 
 const ui = {
   intent: () => document.getElementById('intent').value,
@@ -1520,6 +1520,52 @@ function viewOnMap(lat, lng) {
   // Add a temporary marker
   const marker = L.marker([lat, lng]).addTo(map);
   setTimeout(() => map.removeLayer(marker), 5000);
+}
+
+/**
+ * Add a hazard marker to the map with stable classes for E2E testing
+ * @param {number} lat - Latitude
+ * @param {number} lng - Longitude
+ * @param {Object} hazardData - Hazard information
+ * @param {string} hazardData.type - Hazard type (weather, traffic, etc.)
+ * @param {string} hazardData.severity - Hazard severity (low, medium, high)
+ * @param {string} hazardData.description - Hazard description
+ */
+function addHazardMarker(lat, lng, hazardData) {
+  const { type, severity, description } = hazardData;
+
+  // Create marker with common class
+  const marker = L.marker([lat, lng]).addTo(hazardsLayer);
+
+  // Add stable classes to marker element for E2E testing
+  const markerElement = marker.getElement();
+  if (markerElement) {
+    markerElement.classList.add('hazard-marker');
+    markerElement.classList.add(`hazard-${type}`);
+    markerElement.setAttribute('data-testid', 'hazard-marker');
+    markerElement.setAttribute('data-hazard-type', type);
+    markerElement.setAttribute('data-severity', severity);
+  }
+
+  // Create popup with testable structure
+  const popupContent = `
+    <div class="hazard-popup" data-testid="hazard-popup">
+      <div class="hazard-type" data-testid="hazard-type">${type}</div>
+      <div class="hazard-severity ${severity}" data-testid="hazard-severity">${severity}</div>
+      <div class="hazard-description" data-testid="hazard-description">${description}</div>
+    </div>
+  `;
+
+  marker.bindPopup(popupContent);
+
+  return marker;
+}
+
+/**
+ * Clear all hazard markers from the map
+ */
+function clearHazards() {
+  hazardsLayer.clearLayers();
 }
 
 function updateCurrentActivityDisplay() {
