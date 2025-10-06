@@ -591,7 +591,7 @@
     <!-- Main Content -->
     <main class="app-main">
       <!-- Search View -->
-      <section id="searchView" class="app-view active" data-view="search">
+      <section id="page-search" class="app-view active" data-view="search">
         <div class="view-header">
           <h1>🔍 Find Places</h1>
           <p>Discover amazing places with AI-powered recommendations</p>
@@ -626,7 +626,7 @@
       </section>
 
       <!-- Trip Planning View -->
-      <section id="tripView" class="app-view" data-view="trip">
+      <section id="page-trip" class="app-view" data-view="trip">
         <div class="view-header">
           <h1>🗺️ Plan Your Trip</h1>
           <p>AI-powered trip planning with personalized recommendations</p>
@@ -749,7 +749,7 @@
       </section>
 
       <!-- AI Assistant View -->
-      <section id="aiView" class="app-view" data-view="ai">
+      <section id="page-ai" class="app-view" data-view="ai">
         <div class="view-header">
           <h1>🤖 AI Assistant</h1>
           <p>Voice-powered travel companion</p>
@@ -778,7 +778,7 @@
       </section>
 
       <!-- Profile View -->
-      <section id="profileView" class="app-view" data-view="profile">
+      <section id="page-profile" class="app-view" data-view="profile">
         <div class="view-header">
           <h1>👤 Profile</h1>
           <p>Your travel preferences and history</p>
@@ -804,19 +804,19 @@
 
     <!-- Bottom Navigation -->
     <nav class="bottom-nav">
-      <button class="nav-btn active" data-view="search">
+      <button class="nav-btn active" data-view="search" data-testid="nav-search">
         <span class="nav-icon">🔍</span>
         <span class="nav-label">Search</span>
       </button>
-      <button class="nav-btn" data-view="ai">
+      <button class="nav-btn" data-view="ai" data-testid="nav-ai">
         <span class="nav-icon">🤖</span>
         <span class="nav-label">AI</span>
       </button>
-      <button class="nav-btn" data-view="trip">
+      <button class="nav-btn" data-view="trip" data-testid="nav-trip">
         <span class="nav-icon">🗺️</span>
         <span class="nav-label">Trip</span>
       </button>
-      <button class="nav-btn" data-view="profile">
+      <button class="nav-btn" data-view="profile" data-testid="nav-profile">
         <span class="nav-icon">👤</span>
         <span class="nav-label">Profile</span>
       </button>
