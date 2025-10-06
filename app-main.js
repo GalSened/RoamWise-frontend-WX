@@ -289,8 +289,53 @@ class SimpleNavigation {
         
         generateBtn.textContent = '🤖 Generate Smart Trip';
         generateBtn.disabled = false;
+
+        // Update route chips and navigation links with mock data
+        this.updateRouteInfo({
+          distance: '42.5 km',
+          duration: '1h 15m',
+          avoid: 'tolls, ferries',
+          origin: '32.08,34.78',
+          destination: '31.77,35.22'
+        });
       });
     }
+  }
+
+  updateRouteInfo(routeData) {
+    const routeChips = document.getElementById('route-chips');
+    const navLinks = document.getElementById('nav-links');
+    const chipDistance = document.getElementById('chip-distance');
+    const chipDuration = document.getElementById('chip-duration');
+    const chipAvoid = document.getElementById('chip-avoid');
+    const navWaze = document.getElementById('nav-waze');
+    const navGoogle = document.getElementById('nav-google');
+    const navApple = document.getElementById('nav-apple');
+
+    if (!routeChips || !navLinks) return;
+
+    // Populate chips with route data
+    const distance = routeData?.distance || '42.5 km';
+    const duration = routeData?.duration || '1h 15m';
+    const avoid = routeData?.avoid || 'tolls, ferries';
+
+    chipDistance.textContent = `📏 ${distance}`;
+    chipDuration.textContent = `⏱️ ${duration}`;
+    chipAvoid.textContent = `🚫 Avoid: ${avoid}`;
+
+    // Show chips
+    routeChips.style.display = 'flex';
+
+    // Populate navigation links
+    const origin = routeData?.origin || '32.08,34.78';
+    const destination = routeData?.destination || '31.77,35.22';
+
+    navWaze.href = `https://waze.com/ul?ll=${destination}&navigate=yes`;
+    navGoogle.href = `https://www.google.com/maps/dir/${origin}/${destination}`;
+    navApple.href = `https://maps.apple.com/?saddr=${origin}&daddr=${destination}`;
+
+    // Show navigation links
+    navLinks.style.display = 'flex';
   }
 
   setupVoiceButton() {
