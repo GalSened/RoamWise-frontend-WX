@@ -1,3 +1,7 @@
+> [!WARNING]
+> **This repository has been deprecated and archived.** See [DEPRECATION.md](DEPRECATION.md) for details.  
+> All development has moved to: **https://github.com/GalSened/RoamWise**
+
 # RoamWise - AI-Powered Travel Companion
 
 A modern, production-ready travel application featuring weather-aware routing, voice AI assistance, and comprehensive trip planning capabilities.
