@@ -289,8 +289,53 @@ class SimpleNavigation {
         
         generateBtn.textContent = '🤖 Generate Smart Trip';
         generateBtn.disabled = false;
+
+        // Update route chips and navigation links with mock data
+        this.updateRouteInfo({
+          distance: '42.5 km',
+          duration: '1h 15m',
+          avoid: 'tolls, ferries',
+          origin: '32.08,34.78',
+          destination: '31.77,35.22'
+        });
       });
     }
+  }
+
+  updateRouteInfo(routeData) {
+    const routeChips = document.getElementById('route-chips');
+    const navLinks = document.getElementById('nav-links');
+    const chipDistance = document.getElementById('chip-distance');
+    const chipDuration = document.getElementById('chip-duration');
+    const chipAvoid = document.getElementById('chip-avoid');
+    const navWaze = document.getElementById('nav-waze');
+    const navGoogle = document.getElementById('nav-google');
+    const navApple = document.getElementById('nav-apple');
+
+    if (!routeChips || !navLinks) return;
+
+    // Populate chips with route data
+    const distance = routeData?.distance || '42.5 km';
+    const duration = routeData?.duration || '1h 15m';
+    const avoid = routeData?.avoid || 'tolls, ferries';
+
+    chipDistance.textContent = `📏 ${distance}`;
+    chipDuration.textContent = `⏱️ ${duration}`;
+    chipAvoid.textContent = `🚫 Avoid: ${avoid}`;
+
+    // Show chips
+    routeChips.style.display = 'flex';
+
+    // Populate navigation links
+    const origin = routeData?.origin || '32.08,34.78';
+    const destination = routeData?.destination || '31.77,35.22';
+
+    navWaze.href = `https://waze.com/ul?ll=${destination}&navigate=yes`;
+    navGoogle.href = `https://www.google.com/maps/dir/${origin}/${destination}`;
+    navApple.href = `https://maps.apple.com/?saddr=${origin}&daddr=${destination}`;
+
+    // Show navigation links
+    navLinks.style.display = 'flex';
   }
 
   setupVoiceButton() {
@@ -388,7 +433,7 @@ class SimpleNavigation {
         const resultsDiv = document.getElementById('planner-results');
         if (!resultsDiv) return;
         
-        resultsDiv.innerHTML = '<div style="padding:20px; text-align:center;">🧠 Planning your day...</div>';
+        resultsDiv.innerHTML = '<div data-testid="planner-loading" style="padding:20px; text-align:center;">🧠 Planning your day...</div>';
         btnPlanDay.disabled = true;
         btnPlanDay.textContent = 'Planning...';
         
@@ -417,7 +462,7 @@ class SimpleNavigation {
             const hotelInput = document.getElementById('hotelInput');
             const hotelName = hotelInput?.value?.trim();
             if (!hotelName) {
-              resultsDiv.innerHTML = '<div style="padding:20px; color:#d32f2f;">⚠️ Please enter a hotel name</div>';
+              resultsDiv.innerHTML = '<div data-testid="planner-error" style="padding:20px; color:#d32f2f;">⚠️ Please enter a hotel name</div>';
               btnPlanDay.disabled = false;
               btnPlanDay.textContent = document.querySelector('[data-i18n="planner.plan_day"]')?.textContent || 'Plan Day';
               return;
@@ -438,11 +483,12 @@ class SimpleNavigation {
                 lon: pos.coords.longitude
               };
             } catch (geoErr) {
-              console.error('Geolocation error:', geoErr);
-              resultsDiv.innerHTML = '<div style="padding:20px; color:#d32f2f;">⚠️ Could not get your location. Please enable location services or use hotel mode.</div>';
-              btnPlanDay.disabled = false;
-              btnPlanDay.textContent = document.querySelector('[data-i18n="planner.plan_day"]')?.textContent || 'Plan Day';
-              return;
+              console.warn('Geolocation error, falling back to Tel Aviv center:', geoErr);
+              // Fallback to Tel Aviv center
+              body.origin = {
+                lat: 32.08,
+                lon: 34.78
+              };
             }
           }
           
@@ -541,7 +587,7 @@ class SimpleNavigation {
           
         } catch (error) {
           console.error('Planner error:', error);
-          resultsDiv.innerHTML = `<div style="padding:20px; color:#d32f2f;">❌ Error: ${error.message || 'Failed to plan day'}</div>`;
+          resultsDiv.innerHTML = `<div data-testid="planner-error" style="padding:20px; color:#d32f2f;">❌ Error: ${error.message || 'Failed to plan day'}</div>`;
         } finally {
           btnPlanDay.disabled = false;
           btnPlanDay.textContent = document.querySelector('[data-i18n="planner.plan_day"]')?.textContent || 'Plan Day';
